@@ -1,0 +1,6 @@
+#move
+  .title!= _.template('When <%=condition%>, roll <%=roll%>...', move)
+  .success!=_.template('On a 10+, <%=success%>', move)
+  .partial!=_.template('On a 7-9, <%=partial%>', move)
+  .failure!=_.template('On a miss, <%=failure%>', move)
+  a(href='/moves') Back
