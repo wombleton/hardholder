@@ -2,5 +2,6 @@ h1 Move Index
 ul#moves
   - for (var i in moves)
     - move = moves[i]
+
     li
-      a(href='/moves/' + move.slug)!= _.template('When <%=condition%>, roll <%=roll%>', move)
+      !=move

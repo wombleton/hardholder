@@ -1,6 +1,8 @@
 #move
-  .title!= _.template('When <%=condition%>, roll <%=roll%>...', move)
-  .success!=_.template('On a 10+, <%=success%>', move)
-  .partial!=_.template('On a 7-9, <%=partial%>', move)
-  .failure!=_.template('On a miss, <%=failure%>', move)
+  .title When #{move.condition}, roll #{move.roll}
+  .success On a 10+, #{move.success}
+  .partial On a 7-9, #{move.partial}
+  .failure On a miss, #{move.failure}
   a(href='/moves') Back
+  | 
+  a(href=_.template('/moves/<%=slug%>/edit', move)) Edit
