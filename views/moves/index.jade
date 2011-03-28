@@ -2,6 +2,7 @@ h1 Move Index
 ul#moves
   - for (var i in moves)
     - move = moves[i]
-
     li
-      !=move
+      a(href='/move/' + move.get('slug')) When #{move.condition}
+
+a(href='/moves/new') New Move
