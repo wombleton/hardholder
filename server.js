@@ -21,4 +21,4 @@ var moves = require('./moves'),
     Move = db.model('Move');
 moves.route(app, Move);
 
-app.listen(3000);
+app.listen(80);
