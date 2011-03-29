@@ -1,18 +1,16 @@
 h1 New move
-form(action = '/moves', method = 'POST')
-  p
+form#move(action = '/moves', method = 'POST')
+  .when
     | When
-    input(name='move[condition]')
-    | , roll
+    input.wide(name='move[condition]')
+    | &nbsp; ...
+    | roll
     input(name='move[roll]', size=3)
-  p
-    | On a 10+,
-    textarea(name='move[success]')
-  p
-    | On a 7-9,
-    textarea(name='move[partial]')
-  p
-    | On a miss,
-    textarea(name='move[failure]')
+  label On a 10+
+  textarea(name='move[success]')
+  label On a 7-9
+  textarea(name='move[partial]')
+  label On a miss
+  textarea(name='move[failure]')
   input(type='submit', value='New Move')
   
