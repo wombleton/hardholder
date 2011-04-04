@@ -3,6 +3,6 @@ ul#moves
   - for (var i in moves)
     - move = moves[i]
     li
-      a(href='/move/' + move.get('slug')) When #{move.condition}
+      a(href='/moves/' + move.slug) When #{move.condition}
 
 a(href='/moves/new') New Move
