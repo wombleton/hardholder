@@ -6,7 +6,7 @@
       MoveSchema;
 
   function slug(s) {
-    return (s || '').replace(/[^a-zA-Z0-9]/, '-').replace(/[-]+/, '-');
+    return (s || '').replace(/[^a-zA-Z0-9]/g, '-').replace(/[-]+/g, '-');
   }
 
   MoveSchema = new Schema({
@@ -20,6 +20,12 @@
     postamble: String,
     created_at: Date
   }) ;
+
+  MoveSchema.pre('save', function(next) {
+    this.slug = slug(this.condition);
+    next();
+  });
+
 
   Mongoose.model('Move', MoveSchema);
 
@@ -36,7 +42,7 @@
       var move = new Move(req.body.move);
 
       move.save(function() {
-        res.redirect('/moves/' + move._id.toHexString());
+        res.redirect('/moves/' + move.slug);
       });
     });
 
