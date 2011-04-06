@@ -1,8 +1,14 @@
 #move
-  .title When #{move.condition}, roll #{move.roll}
-  .success On a 10+, #{move.success}
-  .partial On a 7-9, #{move.partial}
-  .failure On a miss, #{move.failure}
+  h1.title When #{move.condition} ...
+
+  h2 Listings
+  ul
+    
+    !=partial('../listings/listing', { collection: move.listings })
+
+  a(href=move.listing_url + '/new') Add Listing
+
+.controls
   a(href='/moves') Back
-  | 
-  a(href=_.template('/moves/<%=slug%>/edit', move)) Edit
+  |  
+  a(href=move.url + '/edit') Edit

@@ -3,22 +3,5 @@ form#move(action = '/moves', method = 'POST')
   .when
     | When
     input.wide(name='move[condition]')
-    | &nbsp; ...
-    | roll
-    input(name='move[roll]', size=3)
-  .collapsed
-    a.expando(href='#') Click to add description
-    label Description
-    textarea(name='move[preamble]')
-  label On a 10+
-  textarea(name='move[success]')
-  label On a 7-9
-  textarea(name='move[partial]')
-  label On a miss
-  textarea(name='move[failure]')
-  .collapsed
-    a.expando(href='#') Click to add description
-    label Description
-    textarea(name='move[postamble]')
   input(type='submit', value='New Move')
   

@@ -27,7 +27,8 @@ app.get('/', function(req, res) {
 });
 
 var moves = require('./moves'),
+    Listing = db.model('Listing'),
     Move = db.model('Move');
-moves.route(app, Move);
+moves.route(app, Move, Listing);
 
 app.listen(port);
