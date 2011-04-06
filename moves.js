@@ -47,7 +47,6 @@
   MoveSchema.pre('save', function(next) {
     this.slug = slug(this.condition);
     this.date = new Date();
-    this.listings = [];
     next();
   });
   MoveSchema.virtual('url').get(function() {
