@@ -16,10 +16,10 @@
     </dependency>
 
     <method_context working_directory="/home/node/mongo">
-      <method_credential user="admin" group="staff" privileges='basic,net_privaddr'  />
+      <method_credential user="node" group="staff" privileges='basic,net_privaddr'  />
       <method_environment>
-        <envvar name="PATH" value="/home/admin/local/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/home/node/mongo/bin"/>
-        <envvar name="HOME" value="/home/admin"/>
+        <envvar name="PATH" value="/home/node/local/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/home/node/mongo/bin"/>
+        <envvar name="HOME" value="/home/node"/>
       </method_environment>
     </method_context>
 
