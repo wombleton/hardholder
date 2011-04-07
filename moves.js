@@ -69,10 +69,17 @@
     });
 
     app.post('/moves', function(req, res) {
-      var move = new Move(req.body.move);
-
-      move.save(function() {
-        res.redirect(move.url);
+      var move;
+      Move.findOne({ slug: slug(req.body.move.condition) }, function(err, move) {
+        console.log('err =>' + err + ' move => ' + move);
+        if (!move) {
+          move = new Move(req.body.move);
+          move.save(function() {
+            res.redirect(move.url);
+          });
+        } else {
+          res.redirect(move.url);
+        }
       });
     });
 
