@@ -24,7 +24,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-  res.render('index');
+  res.redirect('/moves');
 });
 
 var moves = require('./moves'),
