@@ -11,6 +11,17 @@ html
   body
     #container
       header
+        .headline
+          #title Apocalypse World Move Dictionary
+          form#search
+            input(name='search')
+            input(type='submit', value='Go')
+        .nav
+          ul
+            li
+              a(href='home') Home
+            li
+              a(href='/moves/new') Add
       div#main(role='main')!=body
       footer
 
