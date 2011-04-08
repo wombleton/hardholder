@@ -1,4 +1,4 @@
-#move
+.move
   h1.title When #{move.condition} ...
 
   h2 Listings
@@ -7,8 +7,3 @@
     !=partial('../listings/listing', { collection: move.listings })
 
   a(href=move.listing_url + '/new') Add Listing
-
-.controls
-  a(href='/moves') Back
-  |  
-  a(href=move.url + '/edit') Edit

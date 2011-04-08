@@ -1,7 +1,4 @@
 ol#moves
-  - for (var i in moves)
-    - move = moves[i]
-    li
-      a(href='/moves/' + move.slug) When #{move.condition}
+  !=partial('movelistitem', { collection: moves })
 
 a(href='/moves/new') New Move
