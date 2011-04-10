@@ -89,19 +89,7 @@
 
     app.get('/moves/:id', function(req, res) {
       Move.findOne({ slug: req.params.id }, function(err, move) {
-        console.log(move.listings[0]);
-        res.render('moves/show', {
-          locals: {
-            move: move
-          }
-        });
-      });
-    });
-
-    app.get('/moves/:slug/edit', function(req, res) {
-      var slug = req.params.slug;
-      Move.find({ slug: slug }, function(err, move) {
-        res.render('moves/edit', {
+        res.render('moves/move', {
           locals: {
             move: move
           }
