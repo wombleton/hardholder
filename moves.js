@@ -24,7 +24,9 @@
   });
 
   ListingSchema.pre('save', function(next) {
-    this.date = new Date();
+    if (!this.date) {
+      this.date = new Date();
+    }
     next();
   });
   ListingSchema.virtual('url').get(function() {
