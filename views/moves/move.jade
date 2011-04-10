@@ -1,7 +1,7 @@
 .move
   h1.title When #{move.condition} ...
 
-  ul
+  ol
     !=partial('../listings/listing', { collection: move.listings })
 
   a(href=move.listing_url + '/new') Add Listing

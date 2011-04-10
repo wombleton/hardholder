@@ -7,10 +7,14 @@ header, footer, #main {
   margin: 0 auto;
 }
 
-h1 {
-  border-bottom: 3px double black;
-  text-transform: capitalize;
+ul {
+  margin: 0;
 }
+
+ol li {
+  list-style: outside decimal;
+}
+
 a {
   text-decoration: none;
 
@@ -35,11 +39,11 @@ header
     li {
       list-style: none inside;
       display: inline-block;
-      margin: 0 1.5em 0 0;
+      margin: 0 0.1em 0 0;
 
       a {
         background: #ccc;
-        border-radius: 3px;
+        border-radius: 5px;
         color: black;
         display: block;
         font-weight: bold;
@@ -68,5 +72,13 @@ form {
     }
     font-size: 2em;
     line-height: 1.6;
+  }
+}
+
+.listing {
+  border: 1px solid black;
+  margin: 0.5em 0 1.5em;
+  .controls {
+    float: right;
   }
 }

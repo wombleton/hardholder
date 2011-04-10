@@ -1,0 +1,9 @@
+.move
+  h1.title
+    a(href=onelistingmove.url) When #{onelistingmove.condition} ...
+
+  - var listing = onelistingmove.toplisting
+  - if (listing)
+    !=partial('../listings/listingbody', { object: onelistingmove.toplisting })
+  - else
+    p No listing yet -- add one!

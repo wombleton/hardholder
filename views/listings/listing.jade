@@ -1,3 +1,6 @@
-.success On a 10+ #{listing.success}
-.partial On a 7 - 9 #{listing.partial}
-.miss On a miss #{listing.failure}
+li.listing
+  .controls
+    a(href=listing.url + '/up') Vote up
+    |  
+    a(href=listing.url + '/down') Vote down
+  !=partial('listingbody', { object: listing })
