@@ -14,6 +14,7 @@
     date: Date,
     description: String,
     failure: String,
+    move_slug: String,
     meta: {
       upvotes: Number,
       downvotes: Number
@@ -23,12 +24,18 @@
     success: String
   });
 
-  ListingSchema.pre('save', function(next) {
-    if (!this.date) {
-      this.date = new Date();
-    }
-    next();
+  ListingSchema.path('date').default(function() {
+    return new Date();
   });
+
+  ListingSchema.path('meta.upvotes').default(function() {
+    return 0;
+  });
+
+  ListingSchema.path('meta.downvotes').default(function() {
+    return 0;
+  });
+
   ListingSchema.virtual('url').get(function() {
     return '/listings/' + this._id;
   });
@@ -36,7 +43,6 @@
   MoveSchema = new Schema({
     condition: String,
     date: Date,
-    listings: [ ListingSchema ],
     listing_url: {
       type: String,
       get: function() {
@@ -46,9 +52,12 @@
     slug: String
   });
 
+  MoveSchema.path('date').default(function() {
+    return new Date();
+  });
+  
   MoveSchema.pre('save', function(next) {
     this.slug = slug(this.condition);
-    this.date = new Date();
     next();
   });
   MoveSchema.virtual('url').get(function() {
@@ -59,11 +68,15 @@
   });
 
   Mongoose.model('Move', MoveSchema);
+
   Mongoose.model('Listing', ListingSchema);
 
   module.exports.route = function(app, Move, Listing) {
     app.get('/moves', function(req, res) {
-      Move.find({}, function(err, docs) {
+      var query = Move.find({});
+      query.desc('date');
+      query.limit(10);
+      query.exec(function(err, docs) {
         res.render('moves/index', { locals: {
           moves: docs
         }});
@@ -73,7 +86,6 @@
     app.post('/moves', function(req, res) {
       var move;
       Move.findOne({ slug: slug(req.body.move.condition) }, function(err, move) {
-        console.log('err =>' + err + ' move => ' + move);
         if (!move) {
           move = new Move(req.body.move);
           move.save(function() {
@@ -91,10 +103,15 @@
 
     app.get('/moves/:id', function(req, res) {
       Move.findOne({ slug: req.params.id }, function(err, move) {
-        res.render('moves/move', {
-          locals: {
-            move: move
-          }
+        var query = Listing.find({ move_slug: move.slug });
+        query.desc('meta.upvotes');
+        query.exec(function(err, listings) {
+          res.render('moves/move', {
+            locals: {
+              listings: listings,
+              move: move
+            }
+          });
         });
       });
     });
@@ -111,15 +128,36 @@
     });
 
     app.post('/moves/:slug/listings', function(req, res) {
-      var slug = req.params.slug;
+      var listing,
+          slug = req.params.slug;
       Move.findOne({ slug: slug }, function(err, move) {
-        move.listings.push(req.body.listing);
-        move.save(function(err) {
+        listing = new Listing(req.body.listing);
+        listing.move_slug = move.slug;
+        listing.save(function(err) {
           if (err) {
             console.log(err);
           } else {
             res.redirect(move.url);
           }
+        });
+      });
+    });
+
+    app.get('/listings/:id/up', function(req, res ) {
+      var id = req.params.id;
+      Listing.findById(id, function(err, listing) {
+        listing.meta.upvotes++;
+        listing.save(function() {
+          res.redirect('/moves/' + listing.move_slug);
+        });
+      });
+    });
+    app.get('/listings/:id/down', function(req, res ) {
+      var id = req.params.id;
+      Listing.findById(id, function(err, listing) {
+        listing.meta.downvotes++;
+        listing.save(function() {
+          res.redirect('/moves/' + listing.move_slug);
         });
       });
     });
