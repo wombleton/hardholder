@@ -85,8 +85,12 @@
           var args = [],
               i;
           this.moves = moves;
-          for (i = 0; i < moves.length; i++) {
-            Listing.findById(moves[i].toplisting, this.MULTI());
+          if (moves.length === 0) {
+            this([]);
+          } else {
+            for (i = 0; i < moves.length; i++) {
+              Listing.findById(moves[i].toplisting, this.MULTI());
+            }
           }
         },
         function(multi) {
