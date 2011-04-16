@@ -7,7 +7,7 @@
       ListingSchema;
 
   function slug(s) {
-    return (s || '').replace(/[^a-zA-Z0-9]/g, '-').replace(/[-]+/g, '-');
+    return (s || '').replace(/[^a-zA-Z0-9]/g, '-').replace(/[-]+/g, '-').toLowerCase();
   }
 
   ListingSchema = new Schema({
