@@ -4,6 +4,6 @@
 
   - var listing = onelistingmove.toplisting
   - if (listing)
-    !=partial('../listings/listingbody', { object: onelistingmove.toplisting })
+    !=partial('../listings/listingbody', { object: listings[listing] })
   - else
     p No listing yet -- add one!
