@@ -1,35 +1,39 @@
 var md = require('node-markdown').Markdown,
+    MD_TAGS = 'b|blockquote|del|dd|dl|dt|em|h1|h2|h3|i|img|li|ol|p|pre|strong|strike|ul|br|hr',
     flow = require('flow'),
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
     ListingSchema;
 
 ListingSchema = new Schema({
-  date: Date,
+  date: {
+    'default': function() {
+      return new Date();
+    },
+    type: Date
+  },
   description: {
     get: function(description) {
-      return md(description, 'b|blockquote|del|dd|dl|dt|em|h1|h2|h3|i|img|li|ol|p|pre|strong|strike|ul|br|hr');
+      return md(description, MD_TAGS);
     },
     type: String
   },
   meta: {
     move_slug: String,
-    upvotes: Number,
-    downvotes: Number
+    upvotes: {
+      'default': function() {
+        return 0;
+      },
+      type: Number
+    },
+    downvotes: {
+      'default': function() {
+        return 0;
+      },
+      type: Number
+    }
   },
   stat: String
-});
-
-ListingSchema.path('date').default(function() {
-  return new Date();
-});
-
-ListingSchema.path('meta.upvotes').default(function() {
-  return 0;
-});
-
-ListingSchema.path('meta.downvotes').default(function() {
-  return 0;
 });
 
 ListingSchema.virtual('url').get(function() {
@@ -102,5 +106,9 @@ module.exports.route = function(app, Move, Listing) {
         }
       });
     });
+  });
+
+  app.get('/preview', function(req, res) {
+    return md(req.params.definition || '', MD_TAGS);
   });
 };
