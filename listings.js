@@ -109,6 +109,6 @@ module.exports.route = function(app, Move, Listing) {
   });
 
   app.get('/preview', function(req, res) {
-    return md(req.params.definition || '', MD_TAGS);
+    res.send(md(req.query.definition || '', MD_TAGS));
   });
 };

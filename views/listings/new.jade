@@ -1,17 +1,12 @@
-h1 New listing for #{move.condition}
-form#listing(action = '/moves/' + move.slug + '/listings', method = 'POST')
-  p
-    label On a 10+
-    textarea(name='listing[success]')
-  p
-    label On a 7 - 9
-    textarea(name='listing[partial]')
-  p
-    label On a miss
-    textarea(name='listing[failure]')
-  p
-    label Description
-    textarea(name='listing[description]')
-  input(type='submit', value='New Listing')
-  |  
-  a(href=move.url) Back
+#content
+  h1 New listing for #{move.condition}
+  form#listing(action = '/moves/' + move.slug + '/listings', method = 'POST')
+    p
+      label Description
+      textarea.definition(name='listing[description]', rows=8)
+    p
+      label Preview
+      #preview
+    input(type='submit', value='New Listing')
+    |  
+    a(href=move.url) Back
