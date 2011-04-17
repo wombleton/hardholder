@@ -27,9 +27,11 @@ app.get('/', function(req, res) {
   res.redirect('/moves');
 });
 
-var moves = require('./moves'),
+var listings = require('./listings'),
+    moves = require('./moves'),
     Listing = db.model('Listing'),
     Move = db.model('Move');
 moves.route(app, Move, Listing);
+listings.route(app, Move, Listing);
 
 app.listen(port);
