@@ -1,2 +1,4 @@
-ol.moves
-  !=partial('onelistingmove', { collection: moves })
+#content
+  ul.moves
+    !=partial('move', { collection: moves, single: true })
+#sidebar

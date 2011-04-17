@@ -1,4 +1,5 @@
-var flow = require('flow'),
+var dateformat = require('dateformat'),
+    flow = require('flow'),
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
     MoveSchema;
@@ -9,7 +10,15 @@ function slug(s) {
 
 MoveSchema = new Schema({
   condition: String,
-  date: Date,
+  date: {
+    'default': function() {
+      return new Date();
+    },
+    type: String,
+    get: function(date) {
+      return dateformat(new Date(), 'dd mmm yyyy');
+    }
+  },
   toplisting: Schema.ObjectId,
   listing_url: {
     type: String,
@@ -18,10 +27,6 @@ MoveSchema = new Schema({
     }
   },
   slug: String
-});
-
-MoveSchema.path('date').default(function() {
-  return new Date();
 });
 
 MoveSchema.pre('save', function(next) {
@@ -64,9 +69,12 @@ module.exports.route = function(app, Move, Listing) {
               listings = {};
           for (i = 0; i < multi.length; i++) {
             listing = multi[i][1];
-            listings[listing._id] = listing;
+            if (listing) {
+              listings[listing._id] = listing;
+            }
           }
           res.render('moves/index', { locals: {
+            dateformat: dateformat,
             moves: this.moves,
             listings: listings
           }});

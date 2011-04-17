@@ -1,20 +1,23 @@
-var flow = require('flow'),
+var md = require('node-markdown').Markdown,
+    flow = require('flow'),
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
     ListingSchema;
 
 ListingSchema = new Schema({
   date: Date,
-  description: String,
-  failure: String,
+  description: {
+    get: function(description) {
+      return md(description, 'b|blockquote|del|dd|dl|dt|em|h1|h2|h3|i|img|li|ol|p|pre|strong|strike|ul|br|hr');
+    },
+    type: String
+  },
   meta: {
     move_slug: String,
     upvotes: Number,
     downvotes: Number
   },
-  partial: String,
-  stat: String,
-  success: String
+  stat: String
 });
 
 ListingSchema.path('date').default(function() {

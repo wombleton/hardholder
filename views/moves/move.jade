@@ -1,8 +1,17 @@
-.move
-  h1.title
-    a(href=move.url) When #{move.condition} ...
-
-  ol
-    !=partial('../listings/listing', { collection: listings })
-
-  a(href=move.listing_url + '/new') Add Listing
+#content
+  .move
+    h1.title
+      a(href=move.url) When #{move.condition} ...
+    .date
+      =move.date
+    - var single;
+    - if (single)
+      - var listing = move.toplisting
+      - if (listing)
+        !=partial('../listings/listing', { object: listings[listing], single: single })
+      - else
+        p No listing yet -- add one!
+    - else
+      ol
+        !=partial('../listings/listing', { collection: listings, single: single })
+      a(href=move.listing_url + '/new') Add definition
