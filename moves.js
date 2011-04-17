@@ -45,41 +45,41 @@ Mongoose.model('Move', MoveSchema);
 module.exports.route = function(app, Move, Listing) {
   app.get('/moves', function(req, res) {
     flow.exec(
-        function() {
-          var query = Move.find({});
-          query.desc('date');
-          query.limit(10);
-          query.exec(this);
-        },
-        function(err, moves) {
-          var args = [],
-              i;
-          this.moves = moves;
-          if (moves.length === 0) {
-            this([]);
-          } else {
-            for (i = 0; i < moves.length; i++) {
-              Listing.findById(moves[i].toplisting, this.MULTI());
-            }
+      function() {
+        var query = Move.find({});
+        query.desc('date');
+        query.limit(10);
+        query.exec(this);
+      },
+      function(err, moves) {
+        var args = [],
+            i;
+        console.log(moves);
+        this.moves = moves;
+        if (moves.length === 0) {
+          this([]);
+        } else {
+          for (i = 0; i < moves.length; i++) {
+            Listing.findById(moves[i].toplisting, this.MULTI());
           }
-        },
-        function(multi) {
-          var i,
-              listing,
-              listings = {};
-          for (i = 0; i < multi.length; i++) {
-            listing = multi[i][1];
-            if (listing) {
-              listings[listing._id] = listing;
-            }
-          }
-          res.render('moves/index', { locals: {
-            dateformat: dateformat,
-            moves: this.moves,
-            listings: listings
-          }});
         }
-        );
+      },
+      function(multi) {
+        var i,
+            listing,
+            listings = {};
+        for (i = 0; i < multi.length; i++) {
+          listing = multi[i][1];
+          if (listing) {
+            listings[listing._id] = listing;
+          }
+        }
+        res.render('moves/index', { locals: {
+          moves: this.moves,
+          listings: listings
+        }});
+      }
+    );
   });
 
   app.post('/moves', function(req, res) {
