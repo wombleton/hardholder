@@ -57,8 +57,8 @@ MoveSchema.virtual('id_url').get(function() {
 
 Mongoose.model('Move', MoveSchema);
 
-module.exports.route = function(app, Move) {
-  app.get('/moves', function(req, res) {
+module.exports.route = function(server, Move) {
+  server.get('/moves', function(req, res) {
     var query = Move.find({});
     query.desc('date');
     query.limit(10);
@@ -69,18 +69,18 @@ module.exports.route = function(app, Move) {
     });
   });
 
-  app.post('/moves', function(req, res) {
+  server.post('/moves', function(req, res) {
     var move = new Move(req.body.move);
     move.save(function() {
       res.redirect(move.url);
     });
   });
 
-  app.get('/moves/new', function(req, res) {
+  server.get('/moves/new', function(req, res) {
     res.render('moves/new');
   });
 
-  app.get('/moves/:slug', function(req, res) {
+  server.get('/moves/:slug', function(req, res) {
     var query = Move.find({ 'meta.slug': req.params.slug });
     query.desc('meta.upvotes');
     query.exec(function(err, moves) {
@@ -90,11 +90,11 @@ module.exports.route = function(app, Move) {
     });
   });
   
-  app.post('/preview', function(req, res) {
+  server.post('/preview', function(req, res) {
     res.send(md(req.body.definition || '', MD_TAGS));
   });
 
-  app.get('/moves/:id/up', function(req, res) {
+  server.get('/moves/:id/up', function(req, res) {
     flow.exec(
       function() {
         Move.findById(req.params.id, this);
@@ -110,7 +110,7 @@ module.exports.route = function(app, Move) {
     );
   });
   
-  app.get('/moves/:id/down', function(req, res) {
+  server.get('/moves/:id/down', function(req, res) {
     flow.exec(
       function() {
         Move.findById(req.params.id, this);

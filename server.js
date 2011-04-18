@@ -3,7 +3,8 @@ var express = require('express'),
     _ = require('underscore'),
     Mongoose = require('mongoose'),
     db = Mongoose.connect('mongodb://localhost/db'),
-    port = 80;
+    port = 80,
+    no_listen;
 
 server.configure(function() {
   server.use(express.logger());
@@ -18,9 +19,12 @@ server.configure('development', function() {
     showStack: true
   }));
   port = 3000;
-  module.exports.server = server;
 });
 
+server.configure('test', function() {
+  no_listen = true;
+  module.exports.server = server;
+})
 server.set('views', __dirname + '/views');
 server.set('view engine', 'jade');
 
@@ -31,5 +35,8 @@ server.get('/', function(req, res) {
 var moves = require('./moves'),
     Move = db.model('Move');
 moves.route(server, Move);
+                   
+if (!no_listen) {
+server.listen(port);  
+}
 
-server.listen(port);
