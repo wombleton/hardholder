@@ -1,5 +1,7 @@
 var dateformat = require('dateformat'),
     flow = require('flow'),
+    md = require('node-markdown').Markdown,
+    MD_TAGS = 'b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr',
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
     MoveSchema;
@@ -10,6 +12,23 @@ function slug(s) {
 
 MoveSchema = new Schema({
   condition: String,
+  definition: {
+    get: function(defn) {
+       return md(defn, MD_TAGS);
+    },
+    type: String
+  },
+  meta: {
+    downvotes: {
+      type: Number,
+      'default': 0
+    },
+    slug: String,
+    upvotes: {
+      type: Number,
+      'default': 0
+    }
+  },
   date: {
     'default': function() {
       return new Date();
@@ -18,81 +37,38 @@ MoveSchema = new Schema({
     get: function(date) {
       return dateformat(new Date(), 'dd mmm yyyy');
     }
-  },
-  toplisting: Schema.ObjectId,
-  listing_url: {
-    type: String,
-    get: function() {
-      return this.url + '/listings'
-    }
-  },
-  slug: String
+  }
 });
 
 MoveSchema.pre('save', function(next) {
-  this.slug = slug(this.condition);
+  this.meta.slug = slug(this.condition);
   next();
 });
 MoveSchema.virtual('url').get(function() {
-  return '/moves/' + this.slug;
+  return '/moves/' + this.meta.slug;
 });
-MoveSchema.virtual('listing_url').get(function() {
-  return this.url + '/listings';
+MoveSchema.virtual('definition_url').get(function() {
+  return '/moves/' + this.meta.slug  + '/' + this._id;
 });
 
 Mongoose.model('Move', MoveSchema);
 
-module.exports.route = function(app, Move, Listing) {
+module.exports.route = function(app, Move) {
   app.get('/moves', function(req, res) {
-    flow.exec(
-      function() {
-        var query = Move.find({});
-        query.desc('date');
-        query.limit(10);
-        query.exec(this);
-      },
-      function(err, moves) {
-        var args = [],
-            i;
-        console.log(moves);
-        this.moves = moves;
-        if (moves.length === 0) {
-          this([]);
-        } else {
-          for (i = 0; i < moves.length; i++) {
-            Listing.findById(moves[i].toplisting, this.MULTI());
-          }
-        }
-      },
-      function(multi) {
-        var i,
-            listing,
-            listings = {};
-        for (i = 0; i < multi.length; i++) {
-          listing = multi[i][1];
-          if (listing) {
-            listings[listing._id] = listing;
-          }
-        }
-        res.render('moves/index', { locals: {
-          moves: this.moves,
-          listings: listings
-        }});
-      }
-    );
+    var query = Move.find({});
+    query.desc('date');
+    query.limit(10);
+    query.exec(function(err, moves) {
+      res.render('moves/index', { locals: {
+        moves: moves
+      }});
+    });
   });
 
   app.post('/moves', function(req, res) {
-    var move;
-    Move.findOne({ slug: slug(req.body.move.condition) }, function(err, move) {
-      if (!move) {
-        move = new Move(req.body.move);
-        move.save(function() {
-          res.redirect(move.url);
-        });
-      } else {
-        res.redirect(move.url);
-      }
+    var move = new Move(req.body.move);
+    move.save(function() {
+      res.redirect(move.url);
     });
   });
 
@@ -100,18 +76,47 @@ module.exports.route = function(app, Move, Listing) {
     res.render('moves/new');
   });
 
-  app.get('/moves/:id', function(req, res) {
-    Move.findOne({ slug: req.params.id }, function(err, move) {
-      var query = Listing.find({ 'meta.move_slug': move.slug });
-      query.desc('meta.upvotes');
-      query.exec(function(err, listings) {
-        res.render('moves/show', {
-          locals: {
-            listings: listings,
-            move: move
-          }
-        });
+  app.get('/moves/:slug', function(req, res) {
+    var query = Move.find({ 'meta.slug': req.params.slug });
+    query.desc('meta.upvotes');
+    query.exec(function(err, moves) {
+      res.render('moves/show', {
+        moves: moves
       });
     });
+  });
+  
+  app.post('/preview', function(req, res) {
+    res.send(md(req.body.definition || '', MD_TAGS));
+  });
+
+  app.get('/moves/:id/up', function(req, res) {
+    flow.exec(
+      function() {
+        Move.findById(req.params.id, this);
+      },
+      function(err, move) {
+        move.meta.upvotes++;
+        move.save(this);
+      },
+      function(err) {
+        res.redirect(move.url);
+      }
+    );
+  });
+  
+  app.get('/moves/:id/down', function(req, res) {
+    flow.exec(
+      function() {
+        Move.findById(req.params.id, this);
+      },
+      function(err, move) {
+        move.meta.downvotes++;
+        move.save(this);
+      },
+      function(err) {
+        res.redirect(move.url);
+      }
+    );
   });
 };

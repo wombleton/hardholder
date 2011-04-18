@@ -1,7 +1,17 @@
-h1 New move
-form#move(action = '/moves', method = 'POST')
-  .when
-    | When
-    input.wide(name='move[condition]')
-  input(type='submit', value='New Move')
+#content
+  h1 New move
+  form#move(action = '/moves', method = 'POST')
+    p
+      label When
+      input.condition(name='move[condition]')
+    p
+      label Roll
+      input.roll(name='move[stat]')
+    p
+      label Description
+      textarea.definition(name='move[definition]', rows=8)
+    p
+      label Preview
+      #preview
+    input(type='submit', value='New Move')
   

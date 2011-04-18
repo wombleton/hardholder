@@ -3,11 +3,14 @@
   
   function updatePreview(v) {
     $.ajax({
+      type: 'POST',
+      data: {
+        definition: v
+      },
       success: function(res) {
-        console.log(arguments);
         $('#preview').html(res);
       },
-      url: '/preview?' + $.param({ definition: v })
+      url: '/preview'
     });
   }
   
