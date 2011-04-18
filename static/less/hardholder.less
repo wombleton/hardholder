@@ -7,14 +7,6 @@ header, footer, #main {
   margin: 0 auto;
 }
 
-ul {
-  margin: 0;
-}
-
-ol li {
-  list-style: outside decimal;
-}
-
 a {
   text-decoration: none;
 
@@ -75,14 +67,6 @@ form {
   }
 }
 
-.listing {
-  margin: 0.5em 0 1.5em;
-  .controls {
-    padding: 5px 0 0;
-    float: right;
-  }
-}
-            
 #preview {
   min-height: 5em;
 }
@@ -99,7 +83,7 @@ form {
   margin-right: 20px;
 }
 
-.move {
+.move {             
   .title a {
     font-size: 1.2em;
     color: black;
@@ -112,9 +96,24 @@ form {
     letter-spacing: 1px;
     color: #555;
   }
-
-  .definition {
-    padding: 5px 0;
-    line-height:  1.4;
+  
+  .listings {
+    list-style: outside decimal;
+    margin: 1em 0 1em 2em;
   }
+  .listing {
+    background-color: white; 
+    border-bottom: 1px solid #555;
+    margin: 1em 0 1.5em;
+    .controls {
+      padding: 0.5em 0 0;
+      float: right;
+    }
+
+    .definition {
+      padding: 0.5em 0 1em;
+      line-height:  1.4;
+    }
+  }
+              
 }

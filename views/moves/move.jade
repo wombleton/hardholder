@@ -12,6 +12,6 @@
       - else
         p No listing yet -- add one!
     - else
-      ol
+      ol.listings
         !=partial('../listings/listing', { collection: listings, single: single })
       a(href=move.listing_url + '/new') Add definition
