@@ -1,13 +1,9 @@
-- if (!single)
+- if (single)
+  .listing.definition
+    !=partial('controls', { object: listing.meta })
+    !=listing.description
+- else
   li.listing
-    .controls
-      | #{listing.meta.upvotes} up votes
-      a(href=listing.url + '/up') Vote up
-      |
-      | #{listing.meta.downvotes} down votes
-      a(href=listing.url + '/down') Vote down
+    !=partial('controls', { object: listing.meta })
     .definition
       !=listing.description
-- else
-  .listing.definition
-    !=listing.description
