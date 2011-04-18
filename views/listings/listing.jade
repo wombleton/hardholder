@@ -1,7 +1,8 @@
 - if (single)
-  .listing.definition
+  .listing
     !=partial('controls', { object: listing.meta })
-    !=listing.description
+    .definition
+      !=listing.description
 - else
   li.listing
     !=partial('controls', { object: listing.meta })

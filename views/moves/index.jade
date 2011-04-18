@@ -1,4 +1,6 @@
 #content
   ul.moves
-    !=partial('move', { collection: moves, single: true })
+    - for (var i = 0; i < moves.length; i++)
+      li.move
+        !=partial('move', { object: moves[i], single: true })
 #sidebar

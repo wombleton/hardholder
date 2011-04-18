@@ -105,7 +105,7 @@ module.exports.route = function(app, Move, Listing) {
       var query = Listing.find({ 'meta.move_slug': move.slug });
       query.desc('meta.upvotes');
       query.exec(function(err, listings) {
-        res.render('moves/move', {
+        res.render('moves/show', {
           locals: {
             listings: listings,
             move: move
