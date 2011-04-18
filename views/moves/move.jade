@@ -3,14 +3,6 @@
     a(href=move.url) When #{move.condition} ...
   .date
     =move.date
-  - var single;
-  - if (single)
-    - var listing = move.toplisting
-    - if (listing)
-      !=partial('../listings/listing', { object: listings[listing], single: single })
-    - else
-      p No listing yet -- add one!
-  - else
-    ol.listings
-      !=partial('../listings/listing', { collection: listings, single: single })
-    a(href=move.listing_url + '/new') Add definition
+    !=partial('controls', { object: move.meta })
+    .definition
+      !=move.definition

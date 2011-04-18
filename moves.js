@@ -47,8 +47,12 @@ MoveSchema.pre('save', function(next) {
 MoveSchema.virtual('url').get(function() {
   return '/moves/' + this.meta.slug;
 });
+
 MoveSchema.virtual('definition_url').get(function() {
   return '/moves/' + this.meta.slug  + '/' + this._id;
+});
+MoveSchema.virtual('id_url').get(function() {
+  return '/moves/' + this._id;
 });
 
 Mongoose.model('Move', MoveSchema);
@@ -80,7 +84,7 @@ module.exports.route = function(app, Move) {
     var query = Move.find({ 'meta.slug': req.params.slug });
     query.desc('meta.upvotes');
     query.exec(function(err, moves) {
-      res.render('moves/show', {
+      res.render('moves/index', {
         moves: moves
       });
     });
@@ -97,10 +101,11 @@ module.exports.route = function(app, Move) {
       },
       function(err, move) {
         move.meta.upvotes++;
+        this.move = move;
         move.save(this);
       },
       function(err) {
-        res.redirect(move.url);
+        res.redirect(req.headers.referer);
       }
     );
   });
@@ -112,10 +117,11 @@ module.exports.route = function(app, Move) {
       },
       function(err, move) {
         move.meta.downvotes++;
+        this.move = move;
         move.save(this);
       },
       function(err) {
-        res.redirect(move.url);
+        res.redirect(req.headers.referer);
       }
     );
   });
