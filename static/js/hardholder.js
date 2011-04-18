@@ -19,6 +19,6 @@
     }
     previewTimeout = setTimeout(function() {
       updatePreview(value);
-    }, 1000);
+    }, 500);
   });
 }(jQuery))
