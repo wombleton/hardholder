@@ -11,10 +11,15 @@ function slug(s) {
 }
 
 MoveSchema = new Schema({
-  condition: String,
+  condition: {
+    type: String,
+    validate: [function(v) {
+      return !!(v || '').match(/[^\s]/);
+    }, 'Cannot be empty']
+  },
   definition: {
     get: function(defn) {
-       return md(defn, MD_TAGS);
+       return md(defn || '', MD_TAGS);
     },
     type: String
   },
@@ -70,9 +75,14 @@ module.exports.route = function(server, Move) {
   });
 
   server.post('/moves', function(req, res) {
-    var move = new Move(req.body.move);
-    move.save(function() {
-      res.redirect(move.url);
+    var move = new Move(req.body && req.body.move);
+    console.log(req.body)
+    move.save(function(err) {
+      if (err) {
+        res.redirect('/moves/new');
+      } else {
+        res.redirect(move.url);
+      }
     });
   });
 

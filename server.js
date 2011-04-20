@@ -2,8 +2,7 @@ var express = require('express'),
     server = express.createServer(),
     _ = require('underscore'),
     Mongoose = require('mongoose'),
-    db = Mongoose.connect('mongodb://localhost/db'),
-    port = 80,
+    db,
     no_listen;
 
 server.configure(function() {
@@ -13,15 +12,22 @@ server.configure(function() {
   server.use(express.static(__dirname + '/static'))
 });
 
+server.configure('production', function() {
+  db = Mongoose.connect('mongodb://localhost/db')
+  server.listen(80);
+});
+
 server.configure('development', function() {
+  db = Mongoose.connect('mongodb://localhost/db')
   server.use(express.errorHandler({
     dumpExceptions: true,
     showStack: true
   }));
-  port = 3000;
+  server.listen(3000);  
 });
 
 server.configure('test', function() {
+  db = Mongoose.connect('mongodb://localhost/test')
   no_listen = true;
   module.exports.server = server;
 })
@@ -35,8 +41,3 @@ server.get('/', function(req, res) {
 var moves = require('./moves'),
     Move = db.model('Move');
 moves.route(server, Move);
-                   
-if (!no_listen) {
-server.listen(port);  
-}
-

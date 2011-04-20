@@ -43,13 +43,35 @@ exports['GET /moves/new'] = function() {
   });
 }
 
-exports['POST /moves with invalid'] = function() {
+exports['POST /moves with invalid data'] = function() {
   assert.response(server,
   {
     url: '/moves',
-    method: 'POST'
+    method: 'POST',
+    body: ''
   },
   {
     status: 302
+  },
+  function(res) {
+    assert.eql('http://undefined/moves/new', res.headers.location);
+  });
+}
+
+exports['POST /moves'] = function() {
+  assert.response(server,
+  {
+    url: '/moves',
+    method: 'POST',
+    data: 'move[condition]=test'
+  },
+  {
+    status: 302
+  },
+  function(res) {
+    assert.eql('http://undefined/moves/test', res.headers.location);
+    assert.match(res.body, /<h1 class="title>/)
+    assert.match(res.body, /<a href="\/moves\/test">When test ...<\/a>/)
+    assert.match(res.body, /<a href="\/moves\/test">When test ...<\/a>/)
   });
 }
