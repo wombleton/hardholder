@@ -3,6 +3,6 @@
     a(href=move.url) When #{move.condition} ...
   .date
     =move.date
-    !=partial('controls', { object: move.meta })
-    .definition
-      !=move.definition
+  !=partial('controls', { object: move.meta })
+  .definition
+    !=move.definition
