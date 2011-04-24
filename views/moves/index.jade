@@ -1,6 +1,9 @@
 #content
-  ul.moves
+  table.moves
+    col(width='4*')
+    col(width='1*')
+    col(width='1*')
     - for (var i = 0; i < moves.length; i++)
-      li.move
+      tbody.move
         !=partial('move', { object: moves[i], single: true })
 #sidebar
