@@ -1,8 +1,17 @@
-.move
-  h1.title
-    a(href=move.url) When #{move.condition} ...
-  .date
-    =move.date
-  !=partial('controls', { object: move.meta })
-  .definition
-    !=move.definition
+table.move
+  col(width='430px')
+  col(width='70px')
+  col(width='70px')
+  tr.title
+    td(colspan=2).condition
+      a(href=move.url) When #{move.condition} ...
+    td.details
+      .date=move.date
+      !=partial('controls', { object: move.meta })
+    td.stat
+      +#{move.stat}
+  tr
+    td.definition(colspan=3)!=move.definition
+    
+    
+    

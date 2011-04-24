@@ -86,19 +86,26 @@ a:hover { color: #036; }
     \\ ========================================== //
 */
 
+.linear-gradient(@start-color: #BBB, @end-color: #EEE, @start: center top, @degree: -90deg, @end: center bottom) {
+  background-image: -moz-linear-gradient(@start @degree, @start-color, @end-color); 
+  background-image: -webkit-gradient(linear, @start, @end, color-stop(0, @start-color), color-stop(1, @end-color));
+  -webkit-background-origin: padding-box;
+  -pie-background: linear-gradient(@degree, @start-color, @end-color);
+  behavior: url(/less/PIE.htc);
+}
+                                                                                                               
+/* CSS3 border radius */
+.border-radius(@tl: 10px, @tr: 10px, @br: 10px, @bl: 10px) {
+  -webkit-border-radius: @tl @tr @br @bl;
+  -moz-border-radius-topleft: @tl;
+  -moz-border-radius-topright: @tr;
+  -moz-border-radius-bottomleft: @bl;
+  -moz-border-radius-bottomright: @br;
+  border-radius: @tl @tr @br @bl;
+  behavior: url(/admin/css/PIE.htc);
+}
+
 @import "hardholder.less";
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }

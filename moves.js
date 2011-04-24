@@ -42,7 +42,8 @@ MoveSchema = new Schema({
     get: function(date) {
       return dateformat(new Date(), 'dd mmm yyyy');
     }
-  }
+  },
+  stat: String
 });
 
 MoveSchema.pre('save', function(next) {
@@ -76,7 +77,6 @@ module.exports.route = function(server, Move) {
 
   server.post('/moves', function(req, res) {
     var move = new Move(req.body && req.body.move);
-    console.log(req.body)
     move.save(function(err) {
       if (err) {
         res.redirect('/moves/new');

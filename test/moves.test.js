@@ -48,7 +48,10 @@ exports['POST /moves with invalid data'] = function() {
   {
     url: '/moves',
     method: 'POST',
-    body: ''
+    body: '',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   },
   {
     status: 302
@@ -63,7 +66,10 @@ exports['POST /moves'] = function() {
   {
     url: '/moves',
     method: 'POST',
-    data: 'move[condition]=test'
+    data: 'move[condition]=test',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   },
   {
     status: 302
