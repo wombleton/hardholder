@@ -1,6 +1,6 @@
 tr.title
   td(colspan=2).condition
-    a(href=move.url) When #{move.condition} ...
+    a(href=move.url) #{move.condition}
   td.details
     .date=move.date
     !=partial('controls', { object: move.meta })

@@ -86,12 +86,12 @@ a:hover { color: #036; }
     \\ ========================================== //
 */
 
-.linear-gradient(@start-color: #BBB, @end-color: #EEE, @start: center top, @degree: -90deg, @end: center bottom) {
-  background-image: -moz-linear-gradient(@start @degree, @start-color, @end-color); 
-  background-image: -webkit-gradient(linear, @start, @end, color-stop(0, @start-color), color-stop(1, @end-color));
-  -webkit-background-origin: padding-box;
-  -pie-background: linear-gradient(@degree, @start-color, @end-color);
-  behavior: url(/less/PIE.htc);
+.linear-gradient(@start-color: #BBB, @end-color: #EEE) {
+  background: @start-color;
+  background: -webkit-gradient(linear, left top, left bottom, from(@start-color), to(@end-color));
+  background: -moz-linear-gradient(top,  @start-color, @end-color);
+  -pie-background: linear-gradient(-90deg, @start-color, @end-color);
+  behavior: url(/admin/css/PIE.htc);
 }
                                                                                                                
 /* CSS3 border radius */
