@@ -12,10 +12,14 @@ function slug(s) {
 
 MoveSchema = new Schema({
   condition: {
+    'default': '',
     type: String,
-    validate: [function(v) {
-      return !!(v || '').match(/[^\s]/);
-    }, 'Cannot be empty']
+    validate: [
+      function(v) {
+        return (v || '').match(/\w/)
+      },
+      'empty'
+    ]
   },
   definition: {
     get: function(defn) {
@@ -63,6 +67,13 @@ MoveSchema.virtual('id_url').get(function() {
 
 Mongoose.model('Move', MoveSchema);
 
+function validate(move) {
+  var condition = move.condition || '',
+      stat = move.stat || '',
+      definition = move.definition || '';
+  return !condition.match(/^\s*new\s*$/) && condition.match(/\w/) && stat.match(/\w/) && definition.match(/\w/);
+}
+
 module.exports.route = function(server, Move) {
   server.get('/moves', function(req, res) {
     var query = Move.find({});
@@ -77,13 +88,17 @@ module.exports.route = function(server, Move) {
 
   server.post('/moves', function(req, res) {
     var move = new Move(req.body && req.body.move);
-    move.save(function(err) {
-      if (err) {
-        res.redirect('/moves/new');
-      } else {
-        res.redirect(move.url);
-      }
-    });
+    if (validate(move)) {
+      move.save(function(err) {
+        if (err) {
+          res.redirect('/moves/new');
+        } else {
+          res.redirect(move.url);
+        }
+      });
+    } else {
+      res.redirect('/moves/new');
+    }
   });
 
   server.get('/moves/new', function(req, res) {
@@ -94,9 +109,18 @@ module.exports.route = function(server, Move) {
     var query = Move.find({ 'meta.slug': req.params.slug });
     query.desc('meta.upvotes');
     query.exec(function(err, moves) {
-      res.render('moves/index', {
-        moves: moves
-      });
+      if (moves.length === 0) {
+        res.render('404', {
+          locals: {
+            condition: req.params.slug
+          },
+          status: 404 
+        });
+      } else {
+        res.render('moves/index', {
+          moves: moves
+        });
+      }
     });
   });
   
