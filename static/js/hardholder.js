@@ -14,7 +14,7 @@
     });
   }
   
-  $('textarea.definition').live('keyup', function() {
+  $('.definition textarea').live('keyup', function() {
     var value = this.value;
     if (previewTimeout) {
       clearTimeout(previewTimeout);
@@ -23,5 +23,9 @@
     previewTimeout = setTimeout(function() {
       updatePreview(value);
     }, 500);
+  });
+  
+  $(document).ready(function() {
+    $('.condition input').focus();
   });
 }(jQuery))
