@@ -12,8 +12,8 @@
         tr
           td.definition(colspan=2)
             textarea(name='move[definition]', rows=8)
-    p
-      label Preview
-      #preview
+    h1 Preview
+    #preview
     input(type='submit', value='New Move')
-  
+#sidebar
+  !=partial('../editing-hints.jade')
