@@ -1,15 +1,17 @@
 #content
-  h1 New move
   form#move(action = '/moves', method = 'POST')
-    p
-      label When
-      input.condition(name='move[condition]')
-    p
-      label Roll
-      input.roll(name='move[stat]')
-    p
-      label Description
-      textarea.definition(name='move[definition]', rows=8)
+    table.moves
+      col(width='560')
+      col(width='140')
+      tbody.move
+        tr.title
+          td.condition
+            input(name='move[condition]')
+          td.stat
+            input(name='move[stat]')
+        tr
+          td.definition(colspan=2)
+            textarea(name='move[definition]', rows=8)
     p
       label Preview
       #preview
