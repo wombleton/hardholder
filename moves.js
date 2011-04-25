@@ -44,7 +44,7 @@ MoveSchema = new Schema({
     },
     type: String,
     get: function(date) {
-      return dateformat(new Date(), 'dd mmm yyyy');
+      return dateformat(date, 'dd mmm yyyy');
     }
   },
   stat: String
