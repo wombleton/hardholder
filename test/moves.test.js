@@ -135,4 +135,28 @@ exports['GET /moves/not-found returns 404'] = function() {
   function(res) {
     assert.match(res.body, /Move not found. Do you want to <a href="\/moves\/new\?condition=not-found">create it<\/a>\?/);
   });
-} 
+}
+
+exports['GET /moves/my-move/edit'] = function() {
+  var move = new Move({
+    condition: 'my move',
+    stat: 'hard',
+    definition: 'On a 7-9 On a 10+'
+  });
+  move.save(function(err) {
+    Move.findOne({ _id: move.id }, function(err, move) {
+      console.log(move);
+      assert.response(server,
+      {
+        url: '/moves/' + move._id + '/edit'
+      },
+      {
+        status: 200  
+      },
+      function(res) {
+        assert.match(res.body, /<input type="submit" value="Save"\/>/);      
+        assert.match(res.body, /<a href="\/moves\/my-move">Back<\/a>/);      
+      });
+    });
+  });
+}

@@ -1,7 +1,7 @@
 var dateformat = require('dateformat'),
     flow = require('flow'),
     md = require('node-markdown').Markdown,
-    MD_TAGS = 'b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr',
+    MD_TAGS = 'b|em|i|li|ol|p|strong|ul|br|hr',
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
     MoveSchema;
@@ -142,6 +142,17 @@ module.exports.route = function(server, Move) {
         res.redirect(req.headers.referer);
       }
     );
+  });
+  
+  server.get('/moves/:id/edit', function(req, res) {
+    Move.findOne({ _id: req.params.id }, function(err, move) {
+      console.log(move);
+      res.render('moves/edit.jade', {
+        locals: {
+          move: move
+        }
+      });        
+    });
   });
   
   server.get('/moves/:id/down', function(req, res) {
