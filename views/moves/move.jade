@@ -1,5 +1,5 @@
 tr.title
-  td(colspan=2).condition
+  td.condition
     a(href=move.url) #{move.condition}
   td.details
     .date=move.date
@@ -8,6 +8,6 @@ tr.title
     +#{move.stat}
 tr.def
   td.definition(colspan=3)!=move.definition
-    
-    
-    
+tr
+  td(colspan=3)
+    a(href=move.edit_url) Edit

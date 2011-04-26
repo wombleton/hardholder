@@ -1,8 +1,8 @@
 #content
   table.moves
-    col(width='5*')
-    col(width='1*')
-    col(width='1*')
+    col(width='450px')
+    col(width='100px')
+    col(width='150px')
     - for (var i = 0; i < moves.length; i++)
       tbody.move
         !=partial('move', { object: moves[i], single: true })
