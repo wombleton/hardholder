@@ -47,7 +47,9 @@ MoveSchema = new Schema({
       return dateformat(date, 'dd mmm yyyy');
     }
   },
-  stat: String
+  stat: {
+    type: String
+  }
 });
 
 MoveSchema.pre('save', function(next) {
@@ -56,6 +58,9 @@ MoveSchema.pre('save', function(next) {
 });
 MoveSchema.virtual('url').get(function() {
   return '/moves/' + this.meta.slug;
+});
+MoveSchema.virtual('edit_url').get(function() {
+  return '/moves/' + this._id + '/edit';
 });
 
 MoveSchema.virtual('definition_url').get(function() {
@@ -69,9 +74,30 @@ Mongoose.model('Move', MoveSchema);
 
 function validate(move) {
   var condition = move.condition || '',
-      stat = move.stat || '',
-      definition = move.definition || '';
-  return !condition.match(/^\s*new\s*$/) && condition.match(/\w/) && stat.match(/\w/) && definition.match(/\w/);
+      stat,
+      definition = move.definition || '',
+      roll,
+      errors = [];
+  
+  roll = definition.match(/roll\s?[+]\s?(\w+)/i);
+  move.stat = stat = (roll && roll[1]) || '';
+  
+  if (condition.match(/^\s*new\s*$/)) {
+    errors.push('Title cannot be "new".');
+  }
+  if (!condition.match(/\w/)) {
+    errors.push('Title cannot be blank.');
+  }
+  if (!stat.match(/\w/)) {
+    errors.push('Definition must include what to roll, such as "roll +hot".');    
+  }
+  if (!definition.match(/On\s+a\s+7\s?-\s?9/i)) {
+    errors.push('Definition must include "on a 7-9".');
+  }
+  if (!definition.match(/On\s+(a\s+)?10[+]/i)) {
+    errors.push('Definition must include "On 10+".')
+  }
+  return errors;
 }
 
 module.exports.route = function(server, Move) {
@@ -87,8 +113,9 @@ module.exports.route = function(server, Move) {
   });
 
   server.post('/moves', function(req, res) {
-    var move = new Move(req.body && req.body.move);
-    if (validate(move)) {
+    var move = new Move(req.body && req.body.move),
+        errors = validate(move);
+    if (errors.length === 0) {
       move.save(function(err) {
         if (err) {
           res.redirect('/moves/new');
@@ -125,7 +152,16 @@ module.exports.route = function(server, Move) {
   });
   
   server.post('/preview', function(req, res) {
-    res.send(md(req.body.definition || '', MD_TAGS));
+    var move = new Move(req.body.move),
+        errors = validate(move);
+
+    res.render('moves/preview', {
+      layout: false,
+      locals: {
+        errors: errors,
+        move: move
+      }
+    })
   });
 
   server.get('/moves/:id/up', function(req, res) {
@@ -144,17 +180,6 @@ module.exports.route = function(server, Move) {
     );
   });
   
-  server.get('/moves/:id/edit', function(req, res) {
-    Move.findOne({ _id: req.params.id }, function(err, move) {
-      console.log(move);
-      res.render('moves/edit.jade', {
-        locals: {
-          move: move
-        }
-      });        
-    });
-  });
-  
   server.get('/moves/:id/down', function(req, res) {
     flow.exec(
       function() {
@@ -169,5 +194,15 @@ module.exports.route = function(server, Move) {
         res.redirect(req.headers.referer);
       }
     );
+  });
+
+  server.get('/moves/:id/edit', function(req, res) {
+    Move.findById(req.params.id, function(err, move) {
+      res.render('moves/edit.jade', {
+        locals: {
+          move: move
+        }
+      });        
+    });
   });
 };
