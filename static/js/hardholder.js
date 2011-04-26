@@ -7,6 +7,7 @@
       data: $(form).serialize(),
       success: function(res) {
         $('#preview').html(res);
+        $('input.save')[0].disabled = $('.errors').length > 0;
       },
       url: '/preview'
     });
