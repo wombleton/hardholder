@@ -73,10 +73,10 @@ exports['POST /moves with invalid data'] = function() {
   }
   assertErrors('');
   assertErrors('move[condition]');
-  assertErrors('move[condition]=&move[stat]=&move[definition]=');
-  assertErrors('move[condition]=a&move[stat]=b&move[definition]=');
-  assertErrors('move[condition]=a&move[stat]=&move[definition]=c');
-  assertErrors('move[condition]=&move[stat]=b&move[definition]=c');
+  assertErrors('move[condition]=a&move[definition]=');
+  assertErrors('move[condition]=&move[definition]=On a 7-9 On a 10%2b');
+  assertErrors('move[condition]=&move[definition]=roll%2bhot');
+  assertErrors('move[condition]=a&move[definition]=c');
 }
 
 exports['POST /moves'] = function() {
@@ -84,7 +84,7 @@ exports['POST /moves'] = function() {
   {
     url: '/moves',
     method: 'POST',
-    data: 'move[condition]=a good move is a"scary move&move[stat]=b&move[definition]=c',
+    data: 'move[condition]=a good move is a"scary move&move[definition]=On a 7 - 9 On a 10%2b roll%2bhot',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -97,8 +97,8 @@ exports['POST /moves'] = function() {
     Move.findOne({ 'meta.slug': 'a-good-move-is-a-scary-move' }, function(err, move) {
       assert.eql('a-good-move-is-a-scary-move', move.meta.slug);
       assert.eql('a good move is a"scary move', move.condition);
-      assert.eql('b', move.stat);
-      assert.eql('<p>c</p>', move.definition);
+      assert.eql('+hot', move.stat);
+      assert.eql('<p>On a 7 - 9 On a 10+ roll+hot</p>', move.definition);
     });
   });
 }
@@ -138,25 +138,13 @@ exports['GET /moves/not-found returns 404'] = function() {
 }
 
 exports['GET /moves/my-move/edit'] = function() {
-  var move = new Move({
-    condition: 'my move',
-    stat: 'hard',
-    definition: 'On a 7-9 On a 10+'
-  });
-  move.save(function(err) {
-    Move.findOne({ _id: move.id }, function(err, move) {
-      console.log(move);
-      assert.response(server,
-      {
-        url: '/moves/' + move._id + '/edit'
-      },
-      {
-        status: 200  
-      },
-      function(res) {
-        assert.match(res.body, /<input type="submit" value="Save"\/>/);      
-        assert.match(res.body, /<a href="\/moves\/my-move">Back<\/a>/);      
-      });
+  Move.findOne({}, function(err, move) {
+    assert.response(server,
+    {
+      url: move.edit_url
+    },
+    {
+      status: 200
     });
   });
 }
