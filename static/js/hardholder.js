@@ -1,12 +1,10 @@
 (function($) {
   var previewTimeout;
   
-  function updatePreview(v) {
+  function updatePreview(form) {
     $.ajax({
       type: 'POST',
-      data: {
-        definition: v
-      },
+      data: $(form).serialize(),
       success: function(res) {
         $('#preview').html(res);
       },
@@ -14,14 +12,14 @@
     });
   }
   
-  $('.definition textarea').live('keyup', function() {
-    var value = this.value;
+  $('.definition textarea, .condition input').live('keyup', function() {
+    var form = $(this).parents('form');
     if (previewTimeout) {
       clearTimeout(previewTimeout);
       delete previewTimeout;
     }
     previewTimeout = setTimeout(function() {
-      updatePreview(value);
+      updatePreview(form);
     }, 500);
   });
   
