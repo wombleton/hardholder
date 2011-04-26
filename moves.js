@@ -91,7 +91,7 @@ function validate(move) {
   if (!stat.match(/\w/)) {
     errors.push('Definition must include what to roll, such as "roll +hot".');    
   }
-  if (!definition.match(/On\s+a\s+7\s?-\s?9/i)) {
+  if (!definition.match(/On\s+(a\s+)?7\s?-\s?9/i)) {
     errors.push('Definition must include "on a 7-9".');
   }
   if (!definition.match(/On\s+(a\s+)?10[+]/i)) {
