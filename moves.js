@@ -108,14 +108,13 @@ function validate(move) {
 
 module.exports.route = function(server, Move) {
   server.get('/moves', function(req, res) {
-    var query = Move.find({});
-    query.desc('date');
-    query.limit(50);
-    query.exec(function(err, moves) {
-      console.log(moves);
-      res.render('moves/index', { locals: {
-        moves: moves
-      }});
+    var query = Move.find()
+      .desc('date')
+      .limit(50)
+      .run(function(err, moves) {
+        res.render('moves/index', { locals: {
+          moves: moves
+        }});
     });
   });
 
