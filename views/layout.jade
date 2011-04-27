@@ -22,14 +22,22 @@ html
     #container
       header
         .headline
-          #title Apocalypse World Move Dictionary
+          a#title(href='/')
+            img(src='/images/title.png')
           form#search
         .nav
           ul
+            - var context = context || 'directory';
             li
-              a(href='/') Home
+              - if (context === 'directory')
+                a.active(href='/') Directory
+              - else
+                a(href='/') Directory
             li
-              a(href='/moves/new') Add
+              - if (context === 'new')
+                a.active(href='/moves/new') Add Move
+              -else
+                a(href='/moves/new') Add Move
       div#main(role='main')!=body
       footer
 

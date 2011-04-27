@@ -10,8 +10,8 @@ tr.title
     .roll +#{move.stat}
 tr.def
   td.definition(colspan=3)!=move.definition_markdown
-tr.dets
-  td(colspan=3).details
+tr
+  td(colspan=3).src
     - if (move.authors)
       .authors By: #{move.authors}
     - if (move.source)

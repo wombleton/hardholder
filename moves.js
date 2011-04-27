@@ -153,7 +153,11 @@ module.exports.route = function(server, Move) {
   });
   
   server.get('/moves/new', function(req, res) {
-    res.render('moves/new');
+    res.render('moves/new', {
+      locals: {
+        context: 'new'
+      }
+    });
   });
 
   server.get('/moves/:slug', function(req, res) {

@@ -3,7 +3,7 @@ body, p, td, input {
   font-size: 1em;
   background: #f8f8f8;
 }                     
-header, footer, #main {
+header .nav, header .headline, footer, #main {
   width: 960px;
   margin: 0 auto;
 }
@@ -25,36 +25,39 @@ a {
     text-decoration: underline;
   }
 }
-header
-  #title {
-    background: transparent no-repeat url('/images/title.png');
-    display: inline-block;
-    color: transparent;
-    height: 100px;
-    width: 640px;
-  }
+header {
+  border-bottom: 5px solid #440000;
+  margin: 0 0 1em;
+  
   #search {
     display: inline-block;
     width: 320px;
   }
   .nav ul {
-    margin: 0 0 1em 0;
+    margin: 1em 0 0;
     li {
       list-style: none inside;
       display: inline-block;
-      margin: 0 0.1em 0 0;
+      margin: 0 0 0 0.5em;
+      &:first-child {
+        margin-left: 1em;
+      }
 
       a {
-        background: #ccc;
-        border-radius: 5px;
-        color: black;
+        .linear-gradient(#aa0000, #440000);
+        
+        &.active {
+          .linear-gradient(#757575, #4b4b4b);        
+        }
+        .border-radius(5px, 5px, 0, 0);
+        color: white;
         display: block;
         font-weight: bold;
         padding: 0.7em 1.5em;
       }
     }
   }
-
+}
 
 form .move {
   textarea {
@@ -100,9 +103,8 @@ form .move {
   margin: 0;
   width: 100%;
 }
-.move {
-  margin: 0;
-  
+.move {       
+  margin: 0 0 1em;
   .title {
     .condition {                  
       font-family: Verdana, arial, serif;
@@ -143,8 +145,8 @@ form .move {
   .definition {   
     padding: 0.5em 1em;
   }
-  .details {
-    padding: 0.5em 1em 2em;
+  .src {
+    padding: 0 1em;
     .authors {
       margin: 0 5px 0 0;
       float: left;
