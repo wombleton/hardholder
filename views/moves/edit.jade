@@ -1,15 +1,22 @@
 #content
-  form#move(action = '/moves', method = 'POST')
+  form#move(action = move.id_url, method = 'POST')
     table.moves
-      col(width='550')
-      col(width='150')
       tbody.move
         tr.title
           td.condition
-            input(name='move[condition]')
+            input(name='move[condition]', placeholder='MAKE A MOVE', value=move.condition)
         tr
           td.definition
-            textarea(name='move[definition]', rows=8)
+            textarea(name='move[definition]', rows=8, placeholder='When **you make a move**, roll +hot. On a 10+, it works. On a 7-9, it kinda works.')=move.definition 
+              
+        tr
+          td.authors
+            label Authors (optional)
+            input(name='move[authors]', value=move.authors)
+        tr
+          td.authors
+            label Source (optional)
+            input(name='move[source]', value=move.source)
     p
       label Preview
       #preview

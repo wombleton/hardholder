@@ -4,6 +4,7 @@ var dateformat = require('dateformat'),
     MD_TAGS = 'b|em|i|li|ol|p|strong|ul|br|hr',
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
+    _ = require('underscore'),
     MoveSchema;
 
 function slug(s) {
@@ -22,9 +23,6 @@ MoveSchema = new Schema({
     ]
   },
   definition: {
-    get: function(defn) {
-       return md(defn || '', MD_TAGS);
-    },
     type: String
   },
   meta: {
@@ -42,6 +40,7 @@ MoveSchema = new Schema({
     'default': function() {
       return new Date();
     },
+    index: true,
     type: String,
     get: function(date) {
       return dateformat(date, 'dd mmm yyyy');
@@ -49,7 +48,9 @@ MoveSchema = new Schema({
   },
   stat: {
     type: String
-  }
+  },
+  authors: String,
+  source: String
 });
 
 MoveSchema.pre('save', function(next) {
@@ -59,6 +60,11 @@ MoveSchema.pre('save', function(next) {
 MoveSchema.virtual('url').get(function() {
   return '/moves/' + this.meta.slug;
 });
+
+MoveSchema.virtual('definition_markdown').get(function() {
+  return md(this.definition || '', MD_TAGS);
+});
+
 MoveSchema.virtual('edit_url').get(function() {
   return '/moves/' + this._id + '/edit';
 });
@@ -104,8 +110,9 @@ module.exports.route = function(server, Move) {
   server.get('/moves', function(req, res) {
     var query = Move.find({});
     query.desc('date');
-    query.limit(10);
+    query.limit(50);
     query.exec(function(err, moves) {
+      console.log(moves);
       res.render('moves/index', { locals: {
         moves: moves
       }});
@@ -128,6 +135,23 @@ module.exports.route = function(server, Move) {
     }
   });
 
+  server.post('/moves/:id', function(req, res) {
+    Move.findById(req.params.id, function(err, move) {
+      move = _.extend(move, req.body.move);
+      move.save(function(err) {
+        if (err) {
+          res.render('moves/edit', {
+            locals: {
+              move: move
+            }
+          });
+        } else {
+          res.redirect(move.url);
+        }
+      });
+    });
+  });
+  
   server.get('/moves/new', function(req, res) {
     res.render('moves/new');
   });
@@ -198,6 +222,7 @@ module.exports.route = function(server, Move) {
 
   server.get('/moves/:id/edit', function(req, res) {
     Move.findById(req.params.id, function(err, move) {
+      console.log(move);
       res.render('moves/edit.jade', {
         locals: {
           move: move

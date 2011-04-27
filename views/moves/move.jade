@@ -3,8 +3,19 @@ tr.title
     a(href=move.url) #{move.condition}
   td.details
     .date=move.date
+    .edit 
+      a(href=move.edit_url) edit
     !=partial('controls', { object: move.meta })
   td.stat
-    +#{move.stat}
+    .roll +#{move.stat}
 tr.def
-  td.definition(colspan=3)!=move.definition
+  td.definition(colspan=3)!=move.definition_markdown
+tr.dets
+  td(colspan=3).details
+    - if (move.authors)
+      .authors By: #{move.authors}
+    - if (move.source)
+      .source
+        a(href=move.source) source
+    
+  
