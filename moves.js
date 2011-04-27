@@ -112,6 +112,7 @@ module.exports.route = function(server, Move) {
       .desc('date')
       .limit(50)
       .run(function(err, moves) {
+        res.header('Cache-Control', 'no-cache');
         res.render('moves/index', { locals: {
           moves: moves
         }});
