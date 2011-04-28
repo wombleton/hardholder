@@ -91,7 +91,7 @@ a:hover { color: #036; }
   background: -webkit-gradient(linear, left top, left bottom, from(@start-color), to(@end-color));
   background: -moz-linear-gradient(top,  @start-color, @end-color);
   -pie-background: linear-gradient(-90deg, @start-color, @end-color);
-  behavior: url(/admin/css/PIE.htc);
+  behavior: url(/less/PIE.htc);
 }
                                                                                                                
 /* CSS3 border radius */
@@ -102,7 +102,15 @@ a:hover { color: #036; }
   -moz-border-radius-bottomleft: @bl;
   -moz-border-radius-bottomright: @br;
   border-radius: @tl @tr @br @bl;
-  behavior: url(/admin/css/PIE.htc);
+  behavior: url(/less/PIE.htc);
+}  
+
+/* CSS3 box shadow */
+.box-shadow(@x:10px, @y:10px, @blur:5px, @color: #ccc) {
+  -moz-box-shadow: @x @y @blur @color;
+  -webkit-box-shadow: @x @y @blur @color;
+  box-shadow: @x @y @blur @color;
+  behavior: url(/less/PIE.htc);
 }
 
 @import "hardholder.less";

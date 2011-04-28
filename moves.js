@@ -8,9 +8,21 @@ var dateformat = require('dateformat'),
     MoveSchema;
 
 function slug(s) {
-  return (s || '').replace(/[^a-zA-Z0-9]/g, '-').replace(/[-]+/g, '-').toLowerCase();
+  return (s || '').replace(/\s+/, '-').replace(/[^a-zA-Z0-9]/g, '').replace(/[-]+/g, '-').toLowerCase();
 }
 
+function getOffset(page) {
+  page = page || 1;
+  if (page < 1) {
+    page = 1;
+  }
+  return (page - 1) * 50;
+}
+
+function parseTags(tags) {
+  return _.compact((tags || '').split(/\s+/));
+  
+}
 MoveSchema = new Schema({
   condition: {
     'default': '',
@@ -50,7 +62,13 @@ MoveSchema = new Schema({
     type: String
   },
   authors: String,
-  source: String
+  source: String,
+  tags: {
+    set: function(s) {
+      return parseTags(s);
+    },
+    type: [String]
+  }
 });
 
 MoveSchema.pre('save', function(next) {
@@ -160,6 +178,23 @@ module.exports.route = function(server, Move) {
     });
   });
 
+  server.get('/moves/tagged/:tags', function(req, res) {
+    var offset = getOffset(req.params.page),
+        tags = parseTags(req.params.tags);
+    if (tags.length === 0) {
+      res.redirect('/moves');
+    } else {
+      console.log(tags);
+      Move.find({ tags: { $in: tags } }).desc('date').limit(50).skip(offset).run(function(err, moves) {
+        res.render('moves/index', {
+          locals: {
+            moves: moves
+          }
+        });
+      });  
+    }
+  });
+  
   server.get('/moves/:slug', function(req, res) {
     var query = Move.find({ 'meta.slug': req.params.slug });
     query.desc('meta.upvotes');
@@ -198,9 +233,13 @@ module.exports.route = function(server, Move) {
         Move.findById(req.params.id, this);
       },
       function(err, move) {
-        move.meta.upvotes++;
-        this.move = move;
-        move.save(this);
+        if (move) {
+          move.meta.upvotes++;
+          this.move = move;
+          move.save(this);
+        } else {
+          this();
+        }
       },
       function(err) {
         res.redirect(req.headers.referer);
@@ -214,9 +253,13 @@ module.exports.route = function(server, Move) {
         Move.findById(req.params.id, this);
       },
       function(err, move) {
-        move.meta.downvotes++;
-        this.move = move;
-        move.save(this);
+        if (move) {
+          move.meta.downvotes++;
+          this.move = move;
+          move.save(this);
+        } else {
+          this();
+        }
       },
       function(err) {
         res.redirect(req.headers.referer);
