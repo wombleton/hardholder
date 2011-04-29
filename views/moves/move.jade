@@ -2,7 +2,7 @@ tr.title
   td.condition
     a(href=move.url) #{move.condition}
   td.details
-    .date=move.date
+    .date=move.date_display
     .edit 
       a(href=move.edit_url) edit
     !=partial('controls', { object: move.meta })

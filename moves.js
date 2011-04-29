@@ -53,10 +53,7 @@ MoveSchema = new Schema({
       return new Date();
     },
     index: true,
-    type: String,
-    get: function(date) {
-      return dateformat(date, 'dd mmm yyyy');
-    }
+    type: Date
   },
   stat: {
     type: String
@@ -92,6 +89,9 @@ MoveSchema.virtual('definition_url').get(function() {
 });
 MoveSchema.virtual('id_url').get(function() {
   return '/moves/' + this._id;
+});
+MoveSchema.virtual('date_display').get(function() {
+  return dateformat(this.date, 'dd mmm yyyy');
 });
 
 Mongoose.model('Move', MoveSchema);
