@@ -227,14 +227,14 @@ module.exports.route = function(server, Move) {
     })
   });
 
-  server.get('/moves/:id/up', function(req, res) {
+  function vote(req, res, vote) {
     flow.exec(
       function() {
         Move.findById(req.params.id, this);
       },
       function(err, move) {
         if (move) {
-          move.meta.upvotes++;
+          move.meta[vote]++;
           this.move = move;
           move.save(this);
         } else {
@@ -242,29 +242,16 @@ module.exports.route = function(server, Move) {
         }
       },
       function(err) {
-        res.redirect(req.headers.referer);
+        res.redirect(req.headers.referer || '/moves');
       }
     );
+  }
+  server.get('/moves/:id/up', function(req, res) {
+    vote(req, res, 'upvotes');
   });
   
   server.get('/moves/:id/down', function(req, res) {
-    flow.exec(
-      function() {
-        Move.findById(req.params.id, this);
-      },
-      function(err, move) {
-        if (move) {
-          move.meta.downvotes++;
-          this.move = move;
-          move.save(this);
-        } else {
-          this();
-        }
-      },
-      function(err) {
-        res.redirect(req.headers.referer);
-      }
-    );
+    vote(req, res, 'downvotes');
   });
 
   server.get('/moves/:id/edit', function(req, res) {
