@@ -61,10 +61,6 @@ MoveSchema = new Schema({
   authors: String,
   source: String,
   tags: {
-    set: function(s) {
-      return parseTags(s);
-    },
-    type: [String]
   }
 });
 
@@ -158,6 +154,7 @@ module.exports.route = function(server, Move) {
       move = _.extend(move, req.body.move);
       move.save(function(err) {
         if (err) {
+          console.log(err);
           res.render('moves/edit', {
             locals: {
               move: move
@@ -184,7 +181,6 @@ module.exports.route = function(server, Move) {
     if (tags.length === 0) {
       res.redirect('/moves');
     } else {
-      console.log(tags);
       Move.find({ tags: { $in: tags } }).desc('date').limit(50).skip(offset).run(function(err, moves) {
         res.render('moves/index', {
           locals: {
