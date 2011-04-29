@@ -252,7 +252,6 @@ module.exports.route = function(server, Move) {
 
   server.get('/moves/:id/edit', function(req, res) {
     Move.findById(req.params.id, function(err, move) {
-      console.log(move);
       res.render('moves/edit.jade', {
         locals: {
           move: move
