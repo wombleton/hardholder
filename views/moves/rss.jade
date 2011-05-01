@@ -1,0 +1,15 @@
+rss(version='2.0')
+  style
+  channel
+    title Hardholder: Custom Apocalypse World Moves
+    link http://hardholder.com
+    description Custom Apocalypse World Moves
+  - for (var i = 0; i < moves.length; i++)
+    - var move = moves[i]
+    item
+      title=move.condition
+      description
+        h3 #{move.condition} (+#{move.stat})
+        =move.definition_markdown
+      pubDate=new Date(move.ts).toString()
+      guid=move._id

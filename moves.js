@@ -199,6 +199,20 @@ module.exports.route = function(server, Move) {
     }
   });
   
+  server.get('/moves/rss', function(req, res) {
+    var query = Move.find()
+      .desc('ts')
+      .limit(50)
+      .run(function(err, moves) {
+        res.header('Content-Type', 'application/xml; charset=utf-8');
+        res.header('Cache-Control', 'no-cache');
+        res.render('moves/rss', { locals: {
+          layout: false,
+          moves: moves
+        }});
+    });
+  });
+  
   server.get('/moves/:slug', function(req, res) {
     var query = Move.find({ 'meta.slug': req.params.slug });
     query.desc('meta.upvotes');
