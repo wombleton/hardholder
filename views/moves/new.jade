@@ -9,6 +9,10 @@
           td.definition
             textarea(name='move[definition]', rows=8, placeholder='When **you make a move**, roll +hot. On a 10+, it works. On a 7-9, it kinda works.')
         tr
+          td.tags
+            label Tags (optional; space-separated)
+            input(name='move[tags]')
+        tr
           td.authors
             label Authors (optional)
             input(name='move[authors]')

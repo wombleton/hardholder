@@ -68,6 +68,10 @@ MoveSchema = new Schema({
   authors: String,
   source: String,
   tags: {
+    set: function(s) {
+      return parseTags(s);
+    },
+    type: [String]
   }
 });
 
@@ -161,7 +165,6 @@ module.exports.route = function(server, Move) {
       move = _.extend(move, req.body.move);
       move.save(function(err) {
         if (err) {
-          console.log(err);
           res.render('moves/edit', {
             locals: {
               move: move
