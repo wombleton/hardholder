@@ -11,7 +11,7 @@
         tr
           td.tags
             label Tags (optional; space-separated)
-            input(name='move[tags]')
+            input(name='move[tags]', value=move.tags.join(' '))
         tr
           td.authors
             label Authors (optional)

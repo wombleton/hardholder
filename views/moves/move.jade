@@ -17,5 +17,4 @@ tr
     - if (move.source)
       .source
         a(href=move.source) source
-    
-  
+    !=partial('tag', { collection: move.tags })

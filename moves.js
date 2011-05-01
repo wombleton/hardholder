@@ -20,8 +20,10 @@ function getOffset(page) {
 }
 
 function parseTags(tags) {
-  return _.compact((tags || '').split(/\s+/));
-  
+  tags = _.isArray(tags) ? tags.join(' ') : tags || '';
+  return _.map(_.compact(tags.split(/\s+/)), function(tag) {
+    return tag.replace(/[^a-z0-9-_]/gi, '');    
+  });
 }
 MoveSchema = new Schema({
   condition: {
@@ -48,13 +50,6 @@ MoveSchema = new Schema({
       'default': 0
     }
   },
-  date: {
-    'default': function() {
-      return new Date();
-    },
-    index: true,
-    type: Date
-  },
   ts: {
     'default': function() {
       return new Date().getTime();
@@ -68,8 +63,10 @@ MoveSchema = new Schema({
   authors: String,
   source: String,
   tags: {
-    set: function(s) {
-      return parseTags(s);
+    'default': [],
+    index: true,
+    set: function(tags) {
+      return parseTags(tags);
     },
     type: [String]
   }
@@ -98,7 +95,7 @@ MoveSchema.virtual('id_url').get(function() {
   return '/moves/' + this._id;
 });
 MoveSchema.virtual('date_display').get(function() {
-  return dateformat(this.date, 'dd mmm yyyy');
+  return dateformat(new Date(this.ts), 'dd mmm yyyy');
 });
 
 Mongoose.model('Move', MoveSchema);
@@ -191,7 +188,7 @@ module.exports.route = function(server, Move) {
     if (tags.length === 0) {
       res.redirect('/moves');
     } else {
-      Move.find({ tags: { $in: tags } }).desc('ts').limit(50).skip(offset).run(function(err, moves) {
+      Move.find({ tags: { $all: tags } }).desc('ts').limit(50).skip(offset).run(function(err, moves) {
         res.render('moves/index', {
           locals: {
             moves: moves
