@@ -1,1 +1,3 @@
-a.tag(href='/moves/tagged/' + tag)=tag
+- tag = tag || ''
+- if (tag)
+  a.tag(href='/moves/tagged/' + tag)=tag
