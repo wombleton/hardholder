@@ -40,4 +40,12 @@ server.get('/', function(req, res) {
 
 var moves = require('./moves'),
     Move = db.model('Move');
+
+Move.find().run(function(err, moves) {
+  var i;
+  for (i = 0; i < moves.length; i++) {
+    moves[i].ts = moves[i].date.getTime();
+    moves[i].save();
+  }
+});
 moves.route(server, Move);

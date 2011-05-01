@@ -8,7 +8,7 @@ var dateformat = require('dateformat'),
     MoveSchema;
 
 function slug(s) {
-  return (s || '').replace(/\s+/, '-').replace(/[^a-zA-Z0-9]/g, '').replace(/[-]+/g, '-').toLowerCase();
+  return (s || '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').replace(/[-]+/g, '-').toLowerCase();
 }
 
 function getOffset(page) {
@@ -54,6 +54,13 @@ MoveSchema = new Schema({
     },
     index: true,
     type: Date
+  },
+  ts: {
+    'default': function() {
+      return new Date().getTime();
+    },
+    index: true,
+    type: Number
   },
   stat: {
     type: String
@@ -123,7 +130,7 @@ function validate(move) {
 module.exports.route = function(server, Move) {
   server.get('/moves', function(req, res) {
     var query = Move.find()
-      .desc('date')
+      .desc('ts')
       .limit(50)
       .run(function(err, moves) {
         res.header('Cache-Control', 'no-cache');
@@ -181,7 +188,7 @@ module.exports.route = function(server, Move) {
     if (tags.length === 0) {
       res.redirect('/moves');
     } else {
-      Move.find({ tags: { $in: tags } }).desc('date').limit(50).skip(offset).run(function(err, moves) {
+      Move.find({ tags: { $in: tags } }).desc('ts').limit(50).skip(offset).run(function(err, moves) {
         res.render('moves/index', {
           locals: {
             moves: moves

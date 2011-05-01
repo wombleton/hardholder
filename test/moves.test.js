@@ -45,11 +45,12 @@ exports['GET /moves/new'] = function() {
     status: 200
   },
   function(res) {
-    assert.match(res.body, /<form id="move" action="\/moves" method="POST">/);
+    assert.match(res.body, /<form action="\/moves" method="POST" class="move">/);
     assert.match(res.body, /name="move\[condition\]"/);
-    assert.match(res.body, /name="move\[stat\]"/);
+    assert.match(res.body, /name="move\[authors\]"/);
+    assert.match(res.body, /name="move\[source\]"/);
     assert.match(res.body, /name="move\[definition\]"/);
-    assert.match(res.body, /<input type="submit" value="New Move"\/>/);
+    assert.match(res.body, /<input type="submit" value="Save" class="save"\/>/);
   });
 }
 
@@ -93,12 +94,13 @@ exports['POST /moves'] = function() {
     status: 302
   },
   function(res) {
-    assert.eql('http://undefined/moves/a-good-move-is-a-scary-move', res.headers.location);
-    Move.findOne({ 'meta.slug': 'a-good-move-is-a-scary-move' }, function(err, move) {
-      assert.eql('a-good-move-is-a-scary-move', move.meta.slug);
+    assert.eql('http://undefined/moves/a-good-move-is-ascary-move', res.headers.location);
+    Move.findOne({ 'meta.slug': 'a-good-move-is-ascary-move' }, function(err, move) {
+      assert.eql('a-good-move-is-ascary-move', move.meta.slug);
       assert.eql('a good move is a"scary move', move.condition);
-      assert.eql('+hot', move.stat);
-      assert.eql('<p>On a 7 - 9 On a 10+ roll+hot</p>', move.definition);
+      assert.eql('hot', move.stat);
+      assert.eql('<p>On a 7 - 9 On a 10+ roll+hot</p>', move.definition_markdown);
+      assert.eql('On a 7 - 9 On a 10+ roll+hot', move.definition);
     });
   });
 }
