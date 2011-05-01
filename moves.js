@@ -5,7 +5,8 @@ var dateformat = require('dateformat'),
     Mongoose = require('mongoose'),
     Schema = Mongoose.Schema,
     _ = require('underscore'),
-    MoveSchema;
+    MoveSchema,
+    PAGE_SIZE = 50;
 
 function slug(s) {
   return (s || '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').replace(/[-]+/g, '-').toLowerCase();
@@ -16,7 +17,7 @@ function getOffset(page) {
   if (page < 1) {
     page = 1;
   }
-  return (page - 1) * 50;
+  return (page - 1) * PAGE_SIZE;
 }
 
 function parseTags(tags) {
@@ -110,8 +111,8 @@ function validate(move) {
   roll = definition.match(/roll\s?[+]\s?(\w+)/i);
   move.stat = stat = (roll && roll[1]) || '';
   
-  if (condition.match(/^\s*new\s*$/)) {
-    errors.push('Title cannot be "new".');
+  if (condition.match(/^\s*(new|tagged|\d+)\s*$/)) {
+    errors.push('Title cannot be "new", "tagged" or just numbers.');
   }
   if (!condition.match(/\w/)) {
     errors.push('Title cannot be blank.');
@@ -130,12 +131,16 @@ function validate(move) {
 
 module.exports.route = function(server, Move) {
   server.get('/moves', function(req, res) {
-    var query = Move.find()
+    var offset = getOffset(req.query.page),
+        query;
+    query = Move.find()
       .desc('ts')
-      .limit(50)
+      .limit(PAGE_SIZE)
+      .skip(offset)
       .run(function(err, moves) {
         res.header('Cache-Control', 'no-cache');
         res.render('moves/index', { locals: {
+          page: offset / PAGE_SIZE,
           moves: moves
         }});
     });
@@ -183,12 +188,16 @@ module.exports.route = function(server, Move) {
   });
 
   server.get('/moves/tagged/:tags', function(req, res) {
-    var offset = getOffset(req.params.page),
+    var offset = getOffset(req.query.page),
         tags = parseTags(req.params.tags);
     if (tags.length === 0) {
       res.redirect('/moves');
     } else {
-      Move.find({ tags: { $all: tags } }).desc('ts').limit(50).skip(offset).run(function(err, moves) {
+      Move.find({ tags: { $all: tags } })
+          .desc('ts')
+          .limit(PAGE_SIZE)
+          .skip(offset)
+          .run(function(err, moves) {
         res.render('moves/index', {
           locals: {
             moves: moves,
@@ -202,7 +211,7 @@ module.exports.route = function(server, Move) {
   server.get('/moves/rss', function(req, res) {
     var query = Move.find()
       .desc('ts')
-      .limit(50)
+      .limit(PAGE_SIZE)
       .run(function(err, moves) {
         res.header('Content-Type', 'application/xml; charset=utf-8');
         res.header('Cache-Control', 'no-cache');

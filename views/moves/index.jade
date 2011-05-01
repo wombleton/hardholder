@@ -6,4 +6,8 @@
     - for (var i = 0; i < moves.length; i++)
       tbody.move
         !=partial('move', { object: moves[i], single: true })
+    - if (moves.length === 0)
+      tbody.move
+        tr.def
+          td.definition Nothing here but the howling wind
 #sidebar
