@@ -28,11 +28,35 @@ a {
 header {                          
   .linear-gradient(#fff, #f0f0f0);
   border-bottom: 5px solid #440000;
-  margin: 0 0 1em;
-  
-  #search {
+  margin: 10px 0 1em;
+                           
+  #search {  
     display: inline-block;
     width: 320px;
+    vertical-align: top;
+    text-align: right;
+    input {
+      line-height: 1.6em;
+      &.tags {
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        border-right: none;
+        width: 200px;
+      }
+      &.search { 
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        border-left: none;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        .linear-gradient(#aa0000, #440000);
+        .border-radius(0, 5px, 5px, 0);
+        color: white;
+        font-weight: bold;
+      }
+    }
   }
   .nav ul {
     margin: 1em 0 0;
@@ -92,7 +116,6 @@ input.save {
   font-weight: bold;
   padding: 0.7em 1.5em;
 }
-
 
 #preview {
   min-height: 5em;

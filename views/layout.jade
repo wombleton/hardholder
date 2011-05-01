@@ -28,6 +28,9 @@ html
             img(src='/images/hardholder.png', height='90px')
             img(src='/images/title.png')
           form#search
+            - var tags = tags || ''
+            input.tags(name='search', placeholder='tag search', value=tags)
+            input.search(type='submit', value='Go')
         .nav
           ul
             - var context = context || 'directory';

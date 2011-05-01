@@ -191,7 +191,8 @@ module.exports.route = function(server, Move) {
       Move.find({ tags: { $all: tags } }).desc('ts').limit(50).skip(offset).run(function(err, moves) {
         res.render('moves/index', {
           locals: {
-            moves: moves
+            moves: moves,
+            tags: tags.join(' ')
           }
         });
       });  
