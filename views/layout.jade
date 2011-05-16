@@ -39,11 +39,6 @@ html
                 a.active(href='/') Directory
               - else
                 a(href='/') Directory
-            li
-              - if (context === 'new')
-                a.active(href='/moves/new') Add Move
-              -else
-                a(href='/moves/new') Add Move
       div#main(role='main')!=body
       footer
         ul
