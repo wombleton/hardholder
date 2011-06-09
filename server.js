@@ -3,7 +3,8 @@ var express = require('express'),
     _ = require('underscore'),
     Mongoose = require('mongoose'),
     db,
-    no_listen;
+    no_listen,
+    cs = require('coffee-script');
 
 server.configure(function() {
   server.use(express.logger());
@@ -42,3 +43,7 @@ var moves = require('./moves'),
     Move = db.model('Move');
 
 moves.route(server, Move);
+
+var games = require('./games'),
+    Game = db.model('Game');
+games.route(server, Game);
