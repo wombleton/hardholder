@@ -53,6 +53,10 @@ module.exports.init = (server, User) ->
     else
       res.render('users/login')
   
+  server.get '/logout', (req, res) ->
+    req.logout()
+    res.redirect '/'
+  
   server.get '/authed/twitter_callback', (req, res) -> 
     req.authenticate ['twitter'], (error, authenticated) ->
       if authenticated
