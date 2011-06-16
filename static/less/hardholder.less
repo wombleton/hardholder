@@ -16,7 +16,11 @@ body, p, td, input {
 header .nav, header .headline, footer, #main {
   width: 960px;
   margin: 0 auto;
-}                                      
+}                    
+
+#main {
+  padding-top: 100px;
+}
 
 footer {
   clear: both;
@@ -52,14 +56,20 @@ a {
 }
 header {                          
   .linear-gradient(#fff, #f0f0f0);
-  border-bottom: 5px solid #440000;
-  margin: 10px 0 1em;
-                           
-  #search {  
-    display: inline-block;
+  position: fixed;
+  width: 100%;
+  .headline {
+    position: relative;
+  }
+  #controls {
     width: 320px;
-    vertical-align: top;
+    position: absolute;
+    right: 0;
+    top: 0;
     text-align: right;
+    vertical-align: middle;
+  }
+  #search {  
     input {
       line-height: 1.6em;
       &.tags {
@@ -68,14 +78,14 @@ header {
         border-left: 1px solid #ccc;
         border-right: none;
         width: 200px;
+        .border-radius(5px, 0, 0, 5px);
       }
       &.search { 
         border-top: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
         border-right: 1px solid #ccc;
         border-left: none;
-        padding-top: 2px;
-        padding-bottom: 2px;
+        padding: 1px 5px;
         .linear-gradient(#aa0000, #440000);
         .border-radius(0, 5px, 5px, 0);
         color: white;
@@ -83,30 +93,7 @@ header {
       }
     }
   }
-  .nav ul {
-    margin: 1em 0 0;
-    li {
-      list-style: none inside;
-      display: inline-block;
-      margin: 0 0 0 0.5em;
-      &:first-child {
-        margin-left: 1em;
-      }
-
-      a {
-        .linear-gradient(#757575, #4b4b4b);        
-        
-        &.active {
-        .linear-gradient(#aa0000, #440000);
-        }
-        .border-radius(5px, 5px, 0, 0);
-        color: white;
-        display: block;
-        font-weight: bold;
-        padding: 0.7em 1.5em;
-      }
-    }
-  }
+                       
 }
 
 form .move {

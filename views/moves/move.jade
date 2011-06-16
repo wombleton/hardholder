@@ -4,7 +4,7 @@ tr.title
   td.details
     .date=move.date_display
     .edit 
-      a(href=move.edit_url) edit
+      a(href=move.edit_url, rel='nofollow') edit
     !=partial('controls', { object: move.meta })
   td.stat
     .roll +#{move.stat}

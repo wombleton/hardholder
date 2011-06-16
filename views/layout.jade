@@ -7,7 +7,6 @@ html
     
     title Hardholder
     link(rel='stylesheet/less', href='/less/style.less', type='text/css')
-    link(rel='stylesheet', href='/css/sencha-touch.css', type='text/css')
     link(rel="SHORTCUT ICON", href="/images/hardholder.png")
     
     script(src='/js/less.js')
@@ -28,18 +27,16 @@ html
           a#title(href='/')
             img(src='/images/hardholder.png', height='90px', width='90px')
             img(src='/images/title.png', height='90px', width='403px')
-          form#search
-            - var tags = tags || ''
-            input.tags(name='search', placeholder='tag search', value=tags)
-            input.search(type='submit', value='Go')
-        .nav
-          ul
-            - var context = context || 'directory';
-            li
-              - if (context === 'directory')
-                a.active(href='/') Directory
-              - else
-                a(href='/') Directory
+          #controls
+            form#search
+              - var tags = tags || ''
+              input.tags(name='search', placeholder='tag search', value=tags)
+              input.search(type='submit', value='Go')
+            - var user = user || undefined;
+            - if (user)
+              a(href='/logout') logout
+            - else
+              a(href='/login') login
       div#main(role='main')!=body
       footer
         ul
