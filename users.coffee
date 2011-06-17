@@ -1,6 +1,6 @@
 Mongoose = require('mongoose')
 Schema = Mongoose.Schema
-config = require('../hardholder_config').cfg
+config = require('/home/node/hardholder_config').cfg
 
 User = new Schema
   name: String
