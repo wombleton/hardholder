@@ -5,7 +5,7 @@
   _ = require('underscore');
   Mongoose = require('mongoose');
   cs = require('coffee-script');
-  config = require('../hardholder_config').cfg;
+  config = require('/home/node/hardholder_config').cfg;
   auth = require('connect-auth');
   db = void 0;
   server.configure(function() {
