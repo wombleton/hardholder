@@ -9,7 +9,7 @@ auth = require('connect-auth')
 db = undefined
 
 server.configure ->
-  #  server.use(express.logger());
+  server.use express.logger()
   server.use(express.bodyParser());
   server.use(express.methodOverride());
   server.use(express.static(__dirname + '/static'))
