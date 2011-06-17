@@ -112,7 +112,7 @@ module.exports.route = (server, Move) ->
           locals:
             page: offset / PAGE_SIZE
             moves: moves
-    
+            user: req.getAuthDetails().user    
 
   server.post '/moves', (req, res) ->
     move = new Move(req.body && req.body.move)
@@ -143,11 +143,11 @@ module.exports.route = (server, Move) ->
     );
   
   server.get '/moves/new', (req, res) ->
-    res.render 'moves/new', {
-      locals: {
+    res.render 'moves/new',
+      locals:
         context: 'new'
-      }
-    }
+        user: req.getAuthDetails().user    
+        
 
   server.get '/moves/tagged/:tags', (req, res) ->
     offset = getOffset(req.query.page)
@@ -160,13 +160,11 @@ module.exports.route = (server, Move) ->
           .limit(PAGE_SIZE)
           .skip(offset)
           .run (err, moves) ->
-            res.render('moves/index', {
-              locals: {
+            res.render 'moves/index',
+              locals:
                 moves: moves,
-                tags: tags.join(' ')
-              }
-            });
-       
+                tags: tags.join ' '
+                user: req.getAuthDetails().user    
   
   server.get '/moves/rss', (req, res) ->
     query = Move.find()
@@ -185,15 +183,15 @@ module.exports.route = (server, Move) ->
     query.desc('meta.upvotes');
     query.exec (err, moves) ->
       if moves.length == 0
-        res.render('404', {
-          locals: {
+        res.render '404',
+          locals:
             condition: req.params.slug
-          },
+            user: req.getAuthDetails().user    
           status: 404 
-        });
       else
         res.render 'moves/index', 
           moves: moves
+          user: req.getAuthDetails().user    
   
   server.post '/preview', (req, res) ->
     move = new Move(req.body.move)
@@ -225,11 +223,11 @@ module.exports.route = (server, Move) ->
 
   server.get '/moves/:id/edit', (req, res) ->
     if req.isAuthenticated()
-      delete req.session.authenticated_redirect_url
       Move.findById req.params.id, (err, move) ->
         res.render 'moves/edit.jade',
           locals:
             move: move
+            user: req.getAuthDetails().user    
     else
       req.session.authenticated_redirect_url = req.url
       res.redirect '/login'

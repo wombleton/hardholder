@@ -1,4 +1,3 @@
-OAuth = require('oauth').OAuth
 Mongoose = require('mongoose')
 Schema = Mongoose.Schema
 config = require('../hardholder_config').cfg
@@ -38,13 +37,15 @@ getAuth = (req) ->
       }
   else
     return undefined
-
     
+loadAccount = (req,loadCallback) ->
+  console.log req.getAuthDetails().user
+  loadCallback(null)
+
 module.exports.init = (server, User) ->
   saveSignup = (user) ->
     usr = new User(user)
     usr.save
-  
     
   server.get '/login', (req, res) ->
     if req.isAuthenticated()
@@ -57,24 +58,18 @@ module.exports.init = (server, User) ->
     req.logout()
     res.redirect '/'
   
-  server.get '/authed/twitter_callback', (req, res) -> 
-    req.authenticate ['twitter'], (error, authenticated) ->
-      if authenticated
-        console.log 'authed'
-        res.send("<html><h1>Hello Facebook user:" + JSON.stringify( req.getAuthDetails() ) + ".</h1></html>")
-      else
-        console.log 'not authed'
-        res.send("<html><h1>Facebook authentication failed :( </h1></html>")
+  # Auth Routes
+  server.get '/auth/twitter', (req,res) ->
+    unless req.query.denied
+      req.authenticate ['twitter'], (error, authenticated) ->
+        loadAccount req, (account) ->
+          if req.query.oauth_token and req.query.oauth_verifier
+            console.log res._headers
+            res.redirect req.session.authenticated_redirect_url or '/'
+            delete req.session.authenticated_redirect_url
+          else
+            console.log 'continuing ...'
+    else
+      console.log 'denying'
+      res.redirect('/')          
       
-###
-  server.get '/authed/twitter_callback', (req, res) ->
-    req.authenticate ['twitter'], (error, authenticated) ->
-      console.log req.isAuthenticated()
-      console.log req.session
-      if authenticated
-        res.redirect req.session.twitter_redirect_url or '/'
-      else
-        delete req.session.twitter_redirect_url
-        res.redirect '/'
-###
-        
