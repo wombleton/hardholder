@@ -1,12 +1,8 @@
 express = require('express')
 server = express.createServer()
-_ = require('underscore')
-Mongoose = require('mongoose')
 cs = require('coffee-script')
 config = require('/home/node/hardholder_config').cfg
 auth = require('connect-auth')
-
-db = undefined
 
 server.configure ->
   server.use express.logger()
@@ -20,11 +16,11 @@ server.configure ->
   ])
 
 server.configure 'production', ->
-  db = Mongoose.connect('mongodb://localhost/db')
+  process.env.server = 'PRODUCTION'
   server.listen(80)
 
 server.configure 'development', ->
-  db = Mongoose.connect('mongodb://localhost/db')
+  process.env.server = 'DEVELOPMENT'
   server.use(express.errorHandler(
     dumpExceptions: true
     showStack: true
@@ -32,7 +28,7 @@ server.configure 'development', ->
   server.listen(3000)  
 
 server.configure 'test', ->
-  db = Mongoose.connect('mongodb://localhost/test')
+  process.env.server = 'TEST'
   no_listen = true
   module.exports.server = server;
 
@@ -41,15 +37,9 @@ server.set('view engine', 'jade')
 
 server.get '/', (req, res) -> res.redirect('/moves')
 
-users = require './users'
-User = db.model 'User'
-users.init server, User
+require './db'
 
-moves = require('./moves')
-Move = db.model('Move')
+require './models/account'
+require './models/move'
 
-moves.route server, Move
-
-games = require('./games')
-Game = db.model('Game')
-games.route(server, Game)
+require './controllers/account'

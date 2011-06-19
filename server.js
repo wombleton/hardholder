@@ -1,13 +1,10 @@
 (function() {
-  var Game, Mongoose, Move, User, auth, config, cs, db, express, games, moves, server, users, _;
+  var auth, config, cs, express, server;
   express = require('express');
   server = express.createServer();
-  _ = require('underscore');
-  Mongoose = require('mongoose');
   cs = require('coffee-script');
   config = require('/home/node/hardholder_config').cfg;
   auth = require('connect-auth');
-  db = void 0;
   server.configure(function() {
     server.use(express.logger());
     server.use(express.bodyParser());
@@ -25,11 +22,11 @@
     ]));
   });
   server.configure('production', function() {
-    db = Mongoose.connect('mongodb://localhost/db');
+    process.env.server = 'PRODUCTION';
     return server.listen(80);
   });
   server.configure('development', function() {
-    db = Mongoose.connect('mongodb://localhost/db');
+    process.env.server = 'DEVELOPMENT';
     server.use(express.errorHandler({
       dumpExceptions: true,
       showStack: true
@@ -38,7 +35,7 @@
   });
   server.configure('test', function() {
     var no_listen;
-    db = Mongoose.connect('mongodb://localhost/test');
+    process.env.server = 'TEST';
     no_listen = true;
     return module.exports.server = server;
   });
@@ -47,13 +44,8 @@
   server.get('/', function(req, res) {
     return res.redirect('/moves');
   });
-  users = require('./users');
-  User = db.model('User');
-  users.init(server, User);
-  moves = require('./moves');
-  Move = db.model('Move');
-  moves.route(server, Move);
-  games = require('./games');
-  Game = db.model('Game');
-  games.route(server, Game);
+  require('./db');
+  require('./models/account');
+  require('./models/move');
+  require('./controllers/account');
 }).call(this);

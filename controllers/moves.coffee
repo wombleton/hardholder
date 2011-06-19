@@ -206,17 +206,22 @@ module.exports.route = (server, Move) ->
     }
 
   vote = (req, res, vote) ->
-    flow.exec(
-      (-> Move.findById(req.params.id, this))
-      , ((err, move) ->
-        if move
-          move.meta[vote]++;
-          this.move = move;
-          move.save(this);
-        else
-          @())
-      ,((err) -> res.redirect(req.headers.referer || '/moves'))
-    );
+    if req.isAuthenticated()
+      flow.exec(
+        (-> Move.findById(req.params.id, @))
+        , ((err, move) ->
+          if move
+            move.meta[vote]++
+            this.move = move
+            move.save(@)
+          else
+            @())
+        ,((err) -> res.redirect(req.headers.referer || '/moves'))
+      );
+    else
+      req.session.authenticated_redirect_url = req.url
+      res.redirect '/login'
+  
   server.get '/moves/:id/up', (req, res) -> vote(req, res, 'upvotes')
   
   server.get '/moves/:id/down', (req, res) -> vote(req, res, 'downvotes')
