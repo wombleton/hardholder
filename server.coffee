@@ -37,9 +37,12 @@ server.set('view engine', 'jade')
 
 server.get '/', (req, res) -> res.redirect('/moves')
 
+
+module.exports.server = server
 require './db'
 
 require './models/account'
 require './models/move'
 
-require './controllers/account'
+require './controllers/accounts'
+require './controllers/moves'
