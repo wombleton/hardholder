@@ -6,9 +6,12 @@ AccountSchema = new Schema
   username: String,
   profile_pic: String
   type: String
-  human: Boolean
-  admin: Boolean
-  id: String
+  human: 
+    default: false
+    type: Boolean
+  admin: 
+    default: false
+    type: Boolean
   email: String
   ts:
     default: -> new Date().getTime()

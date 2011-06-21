@@ -1,0 +1,6 @@
+p Unfortunately we need to check if you're human. This is a once-only check.
+
+form(method='POST', action='/auth/captcha')
+  != recaptcha_form
+
+  input.save(type='submit', value='Check Recaptcha')

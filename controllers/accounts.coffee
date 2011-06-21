@@ -1,5 +1,7 @@
 server = require('../server').server
-
+Account = require('../models/account').Account
+config = require('/home/node/hardholder_config').cfg
+Recaptcha = require('recaptcha').Recaptcha
 getAuth = (req) ->
   details = req.getAuthDetails()
   user = details.user
@@ -9,23 +11,31 @@ getAuth = (req) ->
   
     if twitterish
       return {
-        name: user.username
+        username: user.username
         service: 'twitter'
         url: "https://twitter.com/#{user.username}"
       }
     else if facebookish
       return {
-        name: user.name
+        username: user.name
         service: 'facebook'
         url: user.link
       }
   else
     return undefined
     
-loadAccount = (req,loadCallback) ->
+loadAccount = (req, cb) ->
   auth = getAuth(req)
-  loadCallback(null)
-
+  Account.findOne
+    username: auth.username
+  , (err, account) ->
+    if account
+      cb(account)
+    else
+      account = new Account(auth)
+      account.save (err)->
+        cb(account)
+        
 saveSignup = (user) ->
   usr = new User(user)
   usr.save
@@ -41,24 +51,59 @@ server.get '/logout', (req, res) ->
   req.logout()
   res.redirect '/'
 
+handleAuthenticated = (req, res) ->
+  loadAccount req, (account) ->
+    console.log account
+    if account.human
+      res.redirect req.session.authenticated_redirect_url or '/'
+      delete req.session.authenticated_redirect_url
+    else
+      res.redirect '/auth/captcha'
+
 # Auth Routes
 server.get '/auth/twitter', (req,res) ->
   unless req.query.denied
     req.authenticate ['twitter'], (error, authenticated) ->
-      loadAccount req, (account) ->
-        if req.query.oauth_token and req.query.oauth_verifier
-          res.redirect req.session.authenticated_redirect_url or '/'
-          delete req.session.authenticated_redirect_url
+      if req.isAuthenticated()
+        handleAuthenticated req, res
   else
     res.redirect('/')          
 
 server.get '/auth/facebook', (req,res) ->
   unless req.query.denied
     req.authenticate ['facebook'], (error, authenticated) ->
-      loadAccount req, (account) ->
-        if req.query.oauth_token and req.query.oauth_verifier
+      if req.isAuthenticated()
+        loadAccount req, (account) ->
           res.redirect req.session.authenticated_redirect_url or '/'
           delete req.session.authenticated_redirect_url
   else
     res.redirect('/')          
-      
+
+server.get '/auth/captcha', (req, res) ->
+  if req.isAuthenticated()
+    recaptcha = new Recaptcha(config.captcha_public, config.captcha_secret) 
+    res.render 'users/recaptcha',
+      locals:
+        recaptcha_form: recaptcha.toHTML()
+  else
+    res.redirect '/login'
+
+server.post '/auth/captcha', (req, res) ->
+  if req.isAuthenticated()
+    data =
+      remoteip: req.connection.remoteAddress
+      challenge: req.body.recaptcha_challenge_field
+      response:  req.body.recaptcha_response_field
+    recaptcha = new Recaptcha(config.captcha_public, config.captcha_secret, data);
+    recaptcha.verify (success, error_code) ->
+      if success
+        loadAccount req, (account) ->
+          account.human = true
+          account.save (err) ->
+            handleAuthenticated(req, res)
+      else
+        res.render 'users/recaptcha',
+          locals:
+            recaptcha_form: recaptcha.toHTML()
+  else
+    res.redirect '/login'
