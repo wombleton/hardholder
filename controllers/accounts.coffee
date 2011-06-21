@@ -42,7 +42,7 @@ saveSignup = (user) ->
     
 server.get '/login', (req, res) ->
   if req.isAuthenticated()
-    res.redirect req.session.authenticated_redirect_url
+    res.redirect req.session.authenticated_redirect_url or '/'
     delete req.session.authenticated_redirect_url 
   else
     res.render('users/login')
