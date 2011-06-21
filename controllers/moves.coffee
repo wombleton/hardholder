@@ -69,17 +69,21 @@ server.post '/moves', (req, res) ->
 
 server.post '/moves/:id', (req, res) ->
   Move.findById(req.params.id, (err, move) ->
-    move = _.extend(move, req.body.move);
-    move.save (err) ->
-      if err
-        res.render('moves/edit', {
-          locals: {
-            move: move
-          }
-        });
-      else
-        res.redirect(move.url);
-  );
+    move = _.extend(move, req.body.move)
+    errors = validate(move)
+    if errors.length == 0
+      move.save (err) ->
+        if err
+          res.render 'moves/edit', 
+            locals: 
+              move: move
+        else
+          res.redirect(move.url);
+    else
+      res.render 'moves/edit', 
+        locals: 
+          move: move
+  )
 
 server.get '/moves/new', (req, res) ->
   res.render 'moves/new',
