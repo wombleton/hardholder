@@ -73,9 +73,7 @@ server.get '/auth/facebook', (req,res) ->
   unless req.query.denied
     req.authenticate ['facebook'], (error, authenticated) ->
       if req.isAuthenticated()
-        loadAccount req, (account) ->
-          res.redirect req.session.authenticated_redirect_url or '/'
-          delete req.session.authenticated_redirect_url
+        handleAuthenticated req, res
   else
     res.redirect('/')          
 

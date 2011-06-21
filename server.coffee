@@ -12,7 +12,13 @@ server.configure ->
   server.use express.cookieParser()
   server.use express.session({ secret: config.session_secret })
   server.use auth([ 
-    auth.Twitter({ consumerKey: config.twitter_key, consumerSecret: config.twitter_secret }) 
+    auth.Twitter
+      consumerKey: config.twitter_key
+      consumerSecret: config.twitter_secret
+    auth.Facebook
+      appId: config.facebook_id
+      appSecret: config.facebook_secret
+      callback: config.facebook_callback
   ])
 
 server.configure 'production', ->
