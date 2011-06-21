@@ -4,6 +4,7 @@ Schema = mongoose.Schema
 dateformat = require('dateformat')
 MD_TAGS = 'b|em|i|li|ol|p|strong|ul|br|hr'
 md = require('node-markdown').Markdown
+_ = require('underscore')
 
 slug = (s) -> (s || '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').replace(/[-]+/g, '-').toLowerCase()
 
