@@ -9,13 +9,15 @@ _ = require('underscore')
 slug = (s) -> (s || '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '').replace(/[-]+/g, '-').toLowerCase()
 
 getOffset = (page) ->
-  page ||= 1;
+  page ||= 1
   page = 1 if page < 1
   (page - 1) * PAGE_SIZE
 
 parseTags = (tags) ->
-  tags = if _.isArray(tags) then tags.join(' ') else tags || '';
-  _.map(_.compact(tags.split(/\s+/)), (tag) -> tag.replace(/[^a-z0-9-_]/gi, ''))    
+  tags = if _.isArray(tags) then tags.join(' ') else tags || ''
+  _.map(_.compact(tags.split(/\s+/)), (tag) ->
+    tag.replace(/[^a-z0-9-_]/gi, '').toLowerCase()
+  )
 
 MoveSchema = new Schema({
   condition: {

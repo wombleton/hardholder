@@ -1,22 +1,29 @@
-tr.title
-  td.condition
-    a(href=move.url) #{move.condition}
-  td.details
-    .date=move.date_display
-    .edit 
-      a(href=move.edit_url, rel='nofollow') edit
-    !=partial('controls', { object: move.meta })
-  td.stat
-    .roll +#{move.stat}
-tr.def
-  td.definition(colspan=3)!=move.definition_markdown
-tr
-  td(colspan=3).src
-    - if (move.authors)
-      .authors By: #{move.authors}
-    - if (move.source)
-      .source
-        a(href=move.source) source
-    - if (move.tags && move.tags.length > 0)
-      .tags
-        !=partial('tag', { collection: move.tags })
+- var width = width || 9;
+-  var nolinks = nolinks || false;
+.move
+  .row
+    div(class='span' + width)
+      .btn-group
+        - if (nolinks)
+          .btn-ish.btn-info
+            b=move.condition
+        - else
+          a.btn.btn-info(href=move.url)
+            b=move.condition
+        .btn-ish.btn-normal +#{move.stat}
+        .btn-ish.btn-normal=move.date_display
+        a.btn.btn-inverse(href=move.edit_url, rel='nofollow')
+          i.icon-cog
+  .row.definition
+    div(class='span' + width)
+      !=move.definition_markdown
+  .row
+    div(class='span' + width)
+      .btn-group
+        - if (move.source)
+          a.btn.btn-info.btn-mini(href=move.source)
+            i.icon-external-link
+        - if (move.tags && move.tags.length > 0)
+          !=partial('tag', { collection: move.tags })
+        - if (move.authors)
+          .btn-ish.btn-normal.btn-mini @#{move.authors}

@@ -1,6 +1,5 @@
-server = require('../server').server
+{ config, app } = require('../app')
 Account = require('../models/account').Account
-config = require('/home/node/hardholder_config').cfg
 Recaptcha = require('recaptcha').Recaptcha
 getAuth = (req) ->
   details = req.getAuthDetails()
@@ -8,7 +7,7 @@ getAuth = (req) ->
   if user
     twitterish = user.user_id and user.username
     facebookish = user.name and user.link
-  
+
     if twitterish
       return {
         username: user.username
@@ -23,7 +22,7 @@ getAuth = (req) ->
       }
   else
     return undefined
-    
+
 loadAccount = (req, cb) ->
   auth = getAuth(req)
   Account.findOne
@@ -35,19 +34,19 @@ loadAccount = (req, cb) ->
       account = new Account(auth)
       account.save (err)->
         cb(account)
-        
+
 saveSignup = (user) ->
   usr = new User(user)
   usr.save
-    
-server.get '/login', (req, res) ->
+
+app.get '/login', (req, res) ->
   if req.isAuthenticated()
     res.redirect req.session.authenticated_redirect_url or '/'
-    delete req.session.authenticated_redirect_url 
+    delete req.session.authenticated_redirect_url
   else
     res.render('users/login')
 
-server.get '/logout', (req, res) ->
+app.get '/logout', (req, res) ->
   req.logout()
   res.redirect '/'
 
@@ -61,32 +60,32 @@ handleAuthenticated = (req, res) ->
       res.redirect '/auth/captcha'
 
 # Auth Routes
-server.get '/auth/twitter', (req,res) ->
+app.get '/auth/twitter', (req,res) ->
   unless req.query.denied
     req.authenticate ['twitter'], (error, authenticated) ->
       if req.isAuthenticated()
         handleAuthenticated req, res
   else
-    res.redirect('/')          
+    res.redirect('/')
 
-server.get '/auth/facebook', (req,res) ->
+app.get '/auth/facebook', (req,res) ->
   unless req.query.denied
     req.authenticate ['facebook'], (error, authenticated) ->
       if req.isAuthenticated()
         handleAuthenticated req, res
   else
-    res.redirect('/')          
+    res.redirect('/')
 
-server.get '/auth/captcha', (req, res) ->
+app.get '/auth/captcha', (req, res) ->
   if req.isAuthenticated()
-    recaptcha = new Recaptcha(config.captcha_public, config.captcha_secret) 
+    recaptcha = new Recaptcha(config.captcha_public, config.captcha_secret)
     res.render 'users/recaptcha',
       locals:
         recaptcha_form: recaptcha.toHTML()
   else
     res.redirect '/login'
 
-server.post '/auth/captcha', (req, res) ->
+app.post '/auth/captcha', (req, res) ->
   if req.isAuthenticated()
     data =
       remoteip: req.connection.remoteAddress

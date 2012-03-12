@@ -4,12 +4,12 @@ html
     meta(charset='UTF-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    
-    title Hardholder
-    link(rel='stylesheet/less', href='/less/style.less', type='text/css')
-    link(rel="SHORTCUT ICON", href="/images/hardholder.png")
-    
-    script(src='/js/less.js')
+
+    title Dungeon World Roller
+    != css('screen')
+    != js('hardholder')
+    link(rel='SHORTCUT ICON', href='/images/hardholder.png')
+
     script(type='text/javascript')
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-22941220-1']);
@@ -20,37 +20,29 @@ html
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
-  body
-    #container
-      header
-        .headline
-          a#title(href='/')
-            img(src='/images/hardholder.png', height='90px', width='90px')
-            img(src='/images/title.png', height='90px', width='403px')
-          #controls
-            form#search
-              - var tags = tags || ''
-              input.tags(name='search', placeholder='tag search', value=tags)
-              input.search(type='submit', value='Go')
-            - var user = user || undefined;
-            - if (user)
-              a(href='/logout') logout
-            - else
-              a(href='/login') login
-      div#main(role='main')!=body
-      footer
-        ul
-          li
-            | By
-            a(href='http://twitter.com/wombleton') @wombleton
-          li
-            | For
-            a(href='http://apocalypse-world.com') Apocalypse World
-          li
-            a(href='/moves/rss') RSS
-
-    script(src='/js/modernizr.js')
-    script(src='/js/jquery.js')
-    script(src='/js/hardholder.js?v=2')
-    script(src='/js/lib/sencha-touch.js')
-    
+  body(data-offset="50")
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          a.brand(href="http://hardholder.com") hardholder.com
+          ul.nav
+            li(class=category === 'moves' ? 'active' : '')
+              a(href="/moves") Moves
+            li(class=category === 'play' ? 'active' : '')
+              a(href="/play") Play
+          form#search.navbar-search.pull-right
+            input.search-query(type="text", placeholder="Search")
+    .container
+      !=body
+    footer
+      .container
+        .row
+          .span12
+            .btn-group
+              a.btn(href='http://twitter.com/wombleton') @wombleton
+              a.btn(href='http://apocalypse-world.com')
+                i.icon-external-link
+                |  Apocalypse World
+              a.btn(href='/moves/rss')
+                i.icon-bookmark
+                |  RSS

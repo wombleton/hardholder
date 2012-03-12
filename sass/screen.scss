@@ -1,0 +1,119 @@
+@import "compass/css3";
+
+$baseFontSize: 16px;
+$baseLineHeight: 22px;
+
+@import "bootstrap";
+@import "bootstrap-responsive";
+@import "font-awesome";
+
+body {
+  padding-top: 70px;
+}
+
+.label-lrg {
+  font-size: 13px;
+  padding: 4px 10px 7px;
+}
+.right-curves {
+  @include border-left-radius(0);
+}
+.left-curves {
+  @include border-right-radius(0);
+}
+.navbar-search {
+  margin-bottom: 6px;
+}
+
+#content {
+  .row {
+    line-height: 1.8;
+    padding: 5px 0;
+  }
+}
+
+.gap.icon-arrow-right,  {
+  font-size: 60px;
+  line-height: 2;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  background-image: none !important;
+}
+[class^="icon-"]::before, [class*=" icon-"]::before {
+  vertical-align: middle;
+}
+
+footer {
+  .span12 {
+    text-align: center;
+    & > .btn-group {
+      display: inline-block;
+    }
+  }
+}
+
+.btn-group .btn-ish {
+  @include border-radius(0);
+  position: relative;
+  float: left;
+}
+.btn-group .btn-ish:last-child {
+  @include border-right-radius(4px);
+}
+.btn-group .btn-ish:first-child {
+  @include border-left-radius(4px);
+  margin-left: 0;
+}
+.btn-ish {
+  display: inline-block;
+  padding: 4px 10px 4px;
+  margin-bottom: 0; // For input.btn
+  font-size: $baseFontSize;
+  line-height: $baseLineHeight;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255,255,255,.75);
+  vertical-align: middle;
+  border-width: 1px;
+  border-style: solid;
+  @include border-radius(4px);
+  $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  @include box-shadow($shadow);
+
+  // Give IE7 some love
+  @include reset-filter();
+  @include ie7-restore-left-whitespace();
+  &.btn-mini {
+    font-size: $baseFontSize - 2px;
+    line-height: $baseLineHeight - 4px;
+    padding: 2px 6px;
+  }
+}
+.btn-normal {
+  color: $grayDark;
+  border-color: #ccc;
+  border-bottom-color: #bbb;
+  @include buttonBackground($white, darken($white, 10%));
+}
+.move {
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+  .definition {
+    padding: 1em 0.5em;
+  }
+}
+
+.clip-to-bottom.btn-group {
+  .btn, .btn-ish {
+    border-top-width: 0;
+    @include border-top-radius(0);
+  }
+}
+.clip-to-top.btn-group {
+  .btn, .btn-ish {
+    border-bottom-width: 0;
+    @include border-bottom-radius(0);
+  }
+
+}

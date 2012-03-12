@@ -1,15 +1,6 @@
 -if (errors.length > 0)
-  ul.errors
-    - for (var i = 0; i < errors.length; i++)
-      li=errors[i]
-table.moves
-  col(width='550px')
-  col(width='150px')
-  tbody.move
-    tr.title
-      td.condition
-        #{move.condition}
-      td.stat
-        +#{move.stat}
-    tr.def
-      td.definition(colspan=3)!=move.definition_markdown
+  .row
+    .span5
+      - for (var i = 0; i < errors.length; i++)
+        label.label.label-warning=errors[i]
+!=partial('move', { object: move, width: 5, single: true, nolinks: true })

@@ -1,31 +1,24 @@
-#content
-  form#move(action = move.id_url, method = 'POST')
-    table.moves
-      tbody.move
-        tr.title
-          td.condition
-            input(name='move[condition]', placeholder='MAKE A MOVE', value=move.condition)
-        tr
-          td.definition
-            textarea(name='move[definition]', rows=8, placeholder='When **you make a move**, roll +hot. On a 10+, it works. On a 7-9, it kinda works.')=move.definition 
-        tr
-          td.tags
-            label Tags (optional; space-separated)
-            input(name='move[tags]', value=move.tags.join(' '))
-        tr
-          td.authors
-            label Authors (optional)
-            input(name='move[authors]', value=move.authors)
-        tr
-          td.authors
-            label Source (optional)
-            input(name='move[source]', value=move.source)
-    p
-      label Preview
-      #preview
-    input.save(type='submit', value='Save')
-    a(href=move.url) Back
-    
-#sidebar
+.row
+  .span6
+    form.move(action = move.id_url, method = 'POST')
+      label Name
+      input.span6(name='move[condition]', placeholder='When you make a move on hardholder.com ...', value=move.condition)
+      label Content
+      textarea.span6(name='move[definition]', rows=8, placeholder='When **you make a move**, roll +hot. On a 10+, it works. On a 7-9, it mostly works.')
+        =move.definition
+      label Tags (optional; space-separated)
+      input.span6(name='move[tags]', value=move.tags.join(' '))
+      label Authors (optional)
+      input.span6(name='move[authors]', value=move.authors)
+      label Source (optional)
+      input.span6(name='move[source]', value=move.source)
+      br
+      .btn-group
+        input.btn.btn-success.btn-large(type='submit', value='Save')
+        a.btn.btn-large(href=move.url) Back
+  .span1
+    i.icon-arrow-right.gap
+    | &nbsp;
+  #preview.span5
+.row.editing-hints
   !=partial('../editing-hints.jade')
-  
