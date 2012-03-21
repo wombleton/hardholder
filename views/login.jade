@@ -1,0 +1,33 @@
+.row
+  .span8
+    - if ('undefined' !== typeof errors && errors.length)
+      ul#errors
+        - each error in errors
+          li.error= error
+    form.form-horizontal(action='/login', method='POST')
+      fieldset
+        legend Already registered?
+        .control-group
+          label.control-label(for=everyauth.password.loginFormFieldName) Login
+          .controls
+            input(type='text', name=everyauth.password.loginFormFieldName, value=email)
+        .control-group
+          label.control-label(for=everyauth.password.passwordFormFieldName) Password
+          .controls
+            input(type='password', name=everyauth.password.passwordFormFieldName)
+        .form-actions
+          button.btn.btn-primary(type='submit') Login
+  .span4
+    form.form-horizontal(action='/register', method='POST')
+      fieldset
+        legend Not registered yet?
+        .control-group
+          label.control-label(for=everyauth.password.loginFormFieldName) Login
+          .controls
+            input(type='text', name=everyauth.password.loginFormFieldName, autocomplete='off')
+        .control-group
+          label.control-label(for=everyauth.password.passwordFormFieldName) Password
+          .controls
+            input(type='password', name=everyauth.password.passwordFormFieldName)
+        .form-actions
+          button.btn.btn-primary(type='submit') Register

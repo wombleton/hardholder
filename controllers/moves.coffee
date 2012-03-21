@@ -40,7 +40,6 @@ validate = (move) ->
   errors
 
 app.get('/moves', (req, res) ->
-  debugger
   offset = getOffset(req.query.page)
   query = Move.find()
     .desc('ts')

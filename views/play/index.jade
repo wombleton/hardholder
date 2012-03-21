@@ -1,67 +1,20 @@
 .row
   .span6
     form#room-form.well.form-inline
-        span.label.label-info
-          i.icon-info-sign
-          |  Share this room's code with your friends
-        br
-        input#room.input-small.span2.left-curves(placeholder="public", autocomplete="off")
-        button.btn.btn-info.right-curves
-          i.icon-tag
+      .btn-ish.btn-inverse
+        i.icon-tag
+      |  You're in the
+      input#room.input-small.span2(placeholder="public", autocomplete="off")
+      |  channel.
     form#messages.form-inline
       input.input.input-xlarge.span5.left-curves(placeholder="Type here ...")
       button.btn.btn-success.right-curves(type="submit")
         i.icon-comment
     #room-contents
   .span6
+    .btn-toolbar
+      .btn-group
+        button.btn.btn-success.save-sheet
+          i.icon-ok
+          | Save
     #sheets.accordion
-      - for (var i = 0; i < 10; i++)
-        .accordion-group
-          .accordion-heading
-            .accordion-toggle(data-toggle="collapse", href="#sheet" + (i + 1), data-parent="#sheets")
-              h3 Blank Sheet
-          div(class="accordion-body collapse" + (i == 0 ? " in" : ""), id="sheet" + (i + 1))
-            .accordion-inner
-              .row
-                .span5
-                  .tab-content
-                    .tab-pane.display-pane.active
-                      .btn-toolbar.dice
-                        .btn-group
-                          button.btn.btn-inverse.die(data-modifier="-1", data-stat="Hot") Hot -1
-                        .btn-group
-                          button.btn.btn-inverse.die(data-modifier="+0", data-stat="Hard") Hard +0
-                        .btn-group
-                          button.btn.btn-inverse.die(data-modifier="+1", data-stat="Cool") Cool +1
-                        .btn-group
-                          button.btn.btn-inverse.die(data-modifier="+2", data-stat="Weird") Weird +2
-                        .btn-group
-                          button.btn.btn-inverse.die(data-modifier="+3", data-stat="Sharp") Sharp +3
-                      .btn-toolbar
-                        .btn-group
-                          button.btn.btn-success.edit-sheet(data-target="")
-                            i.icon-cog
-                    .tab-pane.edit-pane
-                      .row
-                        .span4
-                          input.span3(name="name_" + i, placeholder="Name")
-                      - for (var j = 0; j < 10; j++)
-                        .row
-                          .span2
-                            input.span2(name="stat_" + i + "_" + j, type="text", placeholder="Stat name")
-                          .span3
-                            .btn-group(data-toggle="buttons-radio")
-                              button.btn.btn-inverse -1
-                              button.btn.btn-inverse.active +0
-                              button.btn.btn-inverse +1
-                              button.btn.btn-inverse +2
-                              button.btn.btn-inverse +3
-                      .btn-toolbar
-                        .btn-group
-                          button.btn.btn-success.save-sheet
-                            i.icon-ok
-                            | Save
-                        .btn-group
-                          button.btn.cancel-edit
-                            i.icon-remove
-                            | Cancel

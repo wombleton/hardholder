@@ -1,0 +1,33 @@
+.accordion-group
+  .accordion-heading
+    .accordion-toggle(data-toggle="collapse", href="#sheet" + indexInCollection, data-parent="#sheets")
+      h3
+        i.icon-charname
+        | &nbsp;
+        | Sheet ##{indexInCollection + 1}
+  div(id="sheet" + indexInCollection, class="accordion-body collapse" + (firstInCollection ? " in" : ""))
+    .accordion-inner
+      .row
+        .span6.sheet
+          .edit-pane.active
+            form.form
+              table.table.table-condensed.table-striped
+                tbody
+                  tr
+                    td.span5(colspan="2")
+                      input.name(placeholder="Name", value=sheet.name)
+                  - for (var j = 0; j < 10; j++)
+                    tr
+                      td.span2
+                        button.btn.left-curves.btn-success.roll Roll
+                        - var stat = sheet.stats[j]
+                        input.input-medium.stat.right-curves(placeholder="Stat", value=stat ? stat.label : '')
+                      td.span3
+                        .btn-group(data-toggle='buttons-radio')
+                          button.btn.btn-inverse(data-value="2d6 - 1", class="active") -1
+                          button.btn.btn-inverse(data-value="2d6") +0
+                          button.btn.btn-inverse(data-value="2d6 + 1") +1
+                          button.btn.btn-inverse(data-value="2d6 + 2") +2
+                          button.btn.btn-inverse(data-value="2d6 + 3") +3
+                          .btn-ish.btn-inverse.btn-input
+                            input.input.input-mini.custom-roll(placeholder="Custom")

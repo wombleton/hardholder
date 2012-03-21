@@ -5,7 +5,7 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
 
-    title Dungeon World Roller
+    title Hardholder
     != css('screen')
     != js('hardholder')
     link(rel='SHORTCUT ICON', href='/images/hardholder.png')
@@ -30,8 +30,20 @@ html
               a(href="/moves") Moves
             li(class=category === 'play' ? 'active' : '')
               a(href="/play") Play
-          form#search.navbar-search.pull-right
-            input.search-query(type="text", placeholder="Search")
+          .pull-right
+            form#search.navbar-search
+              input.search-query(type="text", placeholder="Search")
+            .btn-group.login
+              - if (everyauth.loggedIn)
+                a.btn(href='/logout', title='Logout')
+                  i.icon-signout
+              - else
+                a.btn.btn-success(href='/auth/twitter', title='Login with Twitter')
+                  i.icon-twitter-sign
+                a.btn.btn-success(href='/auth/facebook', title='Login with Facebook')
+                  i.icon-facebook-sign
+                a.btn.btn-success(href='/login', title='Login with a password')
+                  i.icon-signin
     .container
       !=body
     footer

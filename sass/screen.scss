@@ -21,8 +21,14 @@ body {
 .left-curves {
   @include border-right-radius(0);
 }
-.navbar-search {
-  margin-bottom: 6px;
+.navbar {
+  .login {
+    float: left;
+    margin-left: 10px;
+  }
+  #search {
+    margin-bottom: 6px;
+  }
 }
 
 #content {
@@ -30,6 +36,32 @@ body {
     line-height: 1.8;
     padding: 5px 0;
   }
+}
+
+#room-contents {
+  .icon-charname:before { content: "\f005"; }
+}
+#sheets {
+  .accordion-heading {
+    cursor: pointer;
+  }
+  .accordion-inner {
+    padding-left: 0;
+    padding-right: 0;
+    .sheet {
+      width: 568px;
+    }
+  }
+  input {
+    margin-bottom: 0;
+  }
+  table {
+    margin-bottom: 0;
+
+  }
+
+  .icon-charname:before { content: "\f006"; }
+  .in .icon-charname:before { content: "\f005"; }
 }
 
 .gap.icon-arrow-right,  {
@@ -57,13 +89,13 @@ footer {
   @include border-radius(0);
   position: relative;
   float: left;
-}
-.btn-group .btn-ish:last-child {
-  @include border-right-radius(4px);
-}
-.btn-group .btn-ish:first-child {
-  @include border-left-radius(4px);
-  margin-left: 0;
+  &:last-child {
+    @include border-right-radius(4px);
+  }
+  &:first-child {
+    @include border-left-radius(4px);
+    margin-left: 0;
+  }
 }
 .btn-ish {
   display: inline-block;
@@ -87,6 +119,13 @@ footer {
     font-size: $baseFontSize - 2px;
     line-height: $baseLineHeight - 4px;
     padding: 2px 6px;
+  }
+  &.btn-input {
+    padding: 2px 8px 2px;
+    .input {
+      height: 20px;
+      padding: 2px 4px;
+    }
   }
 }
 .btn-normal {

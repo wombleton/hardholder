@@ -1,16 +1,17 @@
 express = require('express')
 app = express.createServer()
+
 config = undefined
 port = 3000
 
 app.configure('production', ->
-  #  config = require('/home/node/hardholder_config').cfg
+  config = require('/home/node/hardholder_config').cfg
   app.use(express.errorHandler())
-#  port = 80
+  port = 80
 )
 
 app.configure('development', ->
-  #  config = require('./hardholder_config').cfg
+  config = require('./hardholder_config').cfg
   app.use(express.errorHandler(
     dumpExceptions: true
     showStack: true
@@ -27,8 +28,7 @@ app.configure(->
   app.use(require('connect-assets')())
   app.use(express.cookieParser())
 
-#  { session_secret, twitter_key, twitter_secret, facebook_id, facebook_secret, facebook_callback } = config
-#  app.use(express.session( secret: session_secret ))
+  app.use(express.session( secret: config.session_secret ))
 )
 
 app.get('/', (req, res) ->
@@ -41,16 +41,17 @@ app.dynamicHelpers(
 )
 
 module.exports.app = app
-#module.exports.config = config
+module.exports.config = config
 
 require './db'
 
-require('./models/account')
 require('./models/move')
+require('./models/sheet')
 
-require('./controllers/accounts')
+require('./controllers/users')
 require('./controllers/moves')
 require('./controllers/play')
+require('./controllers/sheets')
 
 app.listen(port) unless app.settings.env is 'TEST'
 console.log('hardholder.com server listening on port %d in %s mode', app.address().port, app.settings.env)
