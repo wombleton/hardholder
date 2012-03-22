@@ -12,8 +12,9 @@
             b=move.condition
         .btn-ish.btn-normal +#{move.stat}
         .btn-ish.btn-normal=move.date_display
-        a.btn.btn-inverse(href=move.edit_url, rel='nofollow')
-          i.icon-cog
+        - if (!nolinks)
+          a.btn.btn-inverse(href=move.edit_url, rel='nofollow')
+            i.icon-cog
   .row.definition
     div(class='span' + width)
       !=move.definition_markdown

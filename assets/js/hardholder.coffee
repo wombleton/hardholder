@@ -11,6 +11,12 @@
 if /^\/play/.test(window.location.pathname)
   new Play()
 
+$(document).ready(->
+  $('#search').submit(->
+    window.location.href = "/moves/tagged/#{$('input[type=text]', @).val().replace(/[^a-z0-9-_]/gi, '')}"
+    false
+  )
+)
 $('.move textarea, .move input').live('keyup', _.throttle(->
   form = $(@).parents('form')
   $.ajax(

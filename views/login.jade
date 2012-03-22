@@ -1,16 +1,18 @@
 .row
-  .span8
+  .span12
     - if ('undefined' !== typeof errors && errors.length)
-      ul#errors
+      ul
         - each error in errors
           li.error= error
+.row
+  .span8
     form.form-horizontal(action='/login', method='POST')
       fieldset
         legend Already registered?
         .control-group
           label.control-label(for=everyauth.password.loginFormFieldName) Login
           .controls
-            input(type='text', name=everyauth.password.loginFormFieldName, value=email)
+            input(type='text', name=everyauth.password.loginFormFieldName)
         .control-group
           label.control-label(for=everyauth.password.passwordFormFieldName) Password
           .controls

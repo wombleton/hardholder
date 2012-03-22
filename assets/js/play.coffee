@@ -132,10 +132,6 @@ class @Play
     $(document).ready(=>
       code = _.str.humanize(window.location.pathname.replace(/^\/play\/?/, '')).toLowerCase()
       $('#room-form input').val(code)
-      $('#search').submit(->
-        window.location.href = "/moves/tagged/#{$('input[type=text]', @).val().replace(/[^a-z0-9-_]/gi, '')}"
-        false
-      )
       @update()
     )
   update: ->

@@ -1,6 +1,9 @@
-p Unfortunately we need to check if you're human. This is a once-only check.
+.row
+  .span12
+    form.form(method='POST', action='/auth/captcha')
+      fieldset
+        legend Unfortunately we need to check if you're human. This is a once-only check.
+        != recaptcha_form
 
-form(method='POST', action='/auth/captcha')
-  != recaptcha_form
-
-  input.save(type='submit', value='Check Recaptcha')
+        .form-actions
+          button.btn.btn-success(type='submit') I'm human!

@@ -24,7 +24,7 @@ html
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
-          a.brand(href="http://hardholder.com") hardholder.com
+          a.brand(href='/') hardholder.com
           ul.nav
             li(class=category === 'moves' ? 'active' : '')
               a(href="/moves") Moves
@@ -32,7 +32,7 @@ html
               a(href="/play") Play
           .pull-right
             form#search.navbar-search
-              input.search-query(type="text", placeholder="Search")
+              input.search-query(type="text", placeholder="Tag search")
             .btn-group.login
               - if (everyauth.loggedIn)
                 a.btn(href='/logout', title='Logout')
