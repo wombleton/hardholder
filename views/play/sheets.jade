@@ -1,0 +1,44 @@
+
+-if (everyauth.loggedIn)
+  .btn-toolbar
+    .btn-group
+      button.btn.btn-success.save-sheet
+        i.icon-ok
+        | Save
+- else
+  .row
+    .span6
+      p Log in to save your character sheet for next time
+ul.nav.nav-tabs
+  - for (var i = 0; i < sheets.length; i++)
+    li(class=i == 0 ? "active" : "")
+      a(href="#sheet" + (i + 1), data-toggle="tab") ##{i + 1}
+.tab-content
+  - for (var i = 0; i < sheets.length; i++)
+    - var sheet = sheets[i]
+    div.tab-pane(id="sheet" + (i+1), class=i===0?"active":"")
+      .row
+        .span6.sheet
+          .edit-pane.active
+            form.form
+              table.table.table-condensed.table-striped
+                tbody
+                  tr
+                    td.span5(colspan="2")
+                      input.name(placeholder="Name", value=sheet.name)
+                  - for (var j = 0; j < 10; j++)
+                    - var stat = sheet.stats[j] || { label: 'Stat', roll: '2d6' }
+                    tr
+                      td.span2
+                        button.btn.left-curves.btn-success.roll Roll
+                        input.input-medium.stat.right-curves(placeholder="Stat", value=stat.label)
+                      td.span3
+                        .btn-group(data-toggle='buttons-radio')
+                          button.btn.btn-inverse(data-value="2d6 - 1", class=stat.roll === '2d6 - 1' ? "active" : '') -1
+                          button.btn.btn-inverse(data-value="2d6", class=stat.roll === '2d6' ? "active" : '') +0
+                          button.btn.btn-inverse(data-value="2d6 + 1", class=stat.roll === '2d6 + 1' ? "active" : '') +1
+                          button.btn.btn-inverse(data-value="2d6 + 2", class=stat.roll === '2d6 + 2' ? "active" : '') +2
+                          button.btn.btn-inverse(data-value="2d6 + 3", class=stat.roll === '2d6 + 3' ? "active" : '') +3
+                          .btn-ish.btn-inverse.btn-input
+                            input.input.input-mini.custom-roll(placeholder="Custom")
+

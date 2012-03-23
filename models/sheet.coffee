@@ -21,3 +21,4 @@ SheetSchema = new Schema(
 
 mongoose.model('Sheet', SheetSchema)
 module.exports.Sheet = db.model('Sheet')
+module.exports.SheetSchema = SheetSchema

@@ -1,4 +1,5 @@
 app = require('../app').app
+users= require('./users')
 Move = require('../models/move').Move
 flow = require('flow')
 _ = require('underscore')
@@ -59,11 +60,16 @@ app.post('/moves', (req, res) ->
   move = new Move(req.body && req.body.move)
   errors = validate(move)
   if errors.length == 0
-    move.save((err) ->
-      if err
-        res.redirect('/moves/new')
+    users.auth(req, (authed) ->
+      if authed
+        move.save((err) ->
+          if err
+            res.redirect('/moves/new')
+          else
+            res.redirect(move.url)
+        )
       else
-        res.redirect(move.url)
+        res.redirect('/moves/new')
     )
   else
     res.redirect('/moves/new')
@@ -75,19 +81,28 @@ app.post('/moves/:id', (req, res) ->
     move = _.extend(move, req.body.move)
     errors = validate(move)
     if errors.length == 0
-      move.save((err) ->
-        if err
+      users.auth(req, (authed) ->
+        if authed
+          move.save((err) ->
+            if err
+              res.render('moves/edit',
+                locals:
+                  move: move
+              )
+            else
+              res.redirect(move.url)
+          )
+        else
           res.render('moves/edit',
             locals:
               move: move
           )
-        else
-          res.redirect(move.url)
       )
     else
-      res.render 'moves/edit',
+      res.render('moves/edit',
         locals:
           move: move
+      )
   )
 )
 

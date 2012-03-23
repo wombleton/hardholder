@@ -46,7 +46,7 @@ class @Play
       $('#room-contents').html('')
     )
     socket.on('message', (data) ->
-      { message, modifier, name, roll, stat, time } = data
+      { message, name, result, roll, stat, time } = data
       if roll >= 10
         status = 'success'
       else if 7 <= roll <= 9
@@ -68,7 +68,7 @@ class @Play
           <div class="row">
             <div class="span7">
               <i class="icon-retweet" title=#{time}></i>
-              <span class="label label-success">#{name}</span> rolled <span class="label label-info">#{stat} of 2d6#{modifier}</span>
+              <span class="label label-success">#{name}</span> rolled <span class="label label-info">#{stat} of #{roll}</span>
               and got
               <span class="label label-#{status}">#{roll}</span>
             </div>
@@ -83,7 +83,7 @@ class @Play
       stat = $('.stat', row).val()
       $this = $(@)
       socket.emit('roll',
-        modifier: roll
+        roll: roll
         name: name
         stat: stat
       )
@@ -113,9 +113,10 @@ class @Play
 
     postMessage = ->
       field = $('#messages input')
+      debugger
       socket.emit('message',
         message: field.val()
-        name: $('.accordion-body.in').parent('.accordion-group').find('h3').html()
+        name: $('#sheets .tab-pane.active .name').val()
       )
       field.val('')
       field.focus()
@@ -137,8 +138,7 @@ class @Play
   update: ->
     $.ajax(
       success: (data) ->
-        $('#sheets').html(data)
-        $('.collapse').collapse(toggle: false, parent: '#sheets')
+        $('#sheets').html(data).find('ul').tab()
       type: 'GET'
       url: '/sheets'
     )

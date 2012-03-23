@@ -163,7 +163,7 @@ app.get('/auth/captcha', (req, res) ->
 )
 
 app.post('/auth/captcha', (req, res) ->
-  { loggedIn, userId } = req.session.auth
+  { loggedIn, userId } = req.session.auth or {}
   if loggedIn
     data =
       remoteip: req.connection.remoteAddress
@@ -184,3 +184,17 @@ app.post('/auth/captcha', (req, res) ->
   else
     res.redirect('/')
 )
+
+module.exports.auth = (req, cb) ->
+  { loggedIn, userId } = req.session.auth or {}
+  if loggedIn
+    User.findById(userId, (err, user) ->
+      if err
+        cb(false)
+      else if user?.human
+        cb(user)
+      else
+        cb(false)
+    )
+  else
+    cb(false)

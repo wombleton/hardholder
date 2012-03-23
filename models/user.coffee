@@ -1,6 +1,6 @@
 bcrypt = require('bcrypt')
 db = require('../db').db
-{ Sheet } = require('./sheet')
+{ SheetSchema } = require('./sheet')
 mongoose = require('mongoose')
 { Schema } = mongoose
 
@@ -27,7 +27,7 @@ UserSchema = new Schema(
     id: String
     url: String
   type: String
-  sheets: [ Sheet ]
+  sheets: [ SheetSchema ]
   human:
     default: false
     type: Boolean

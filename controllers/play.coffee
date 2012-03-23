@@ -55,13 +55,13 @@ io.sockets.on('connection', (socket) ->
     )
   )
   socket.on('roll', (data) ->
-    { stat, name, modifier } = data
-    roll = d6() + d6() + Number(modifier)
+    { stat, name, roll } = data
+    result = d6() + d6()
     socket.get('room', (err, room) ->
       io.sockets.in(room).emit('message', addMessage(room,
-        modifier: modifier
-        name: name
         roll: roll
+        name: name
+        result: result
         stat: stat
       ))
     )
