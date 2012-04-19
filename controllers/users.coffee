@@ -1,3 +1,4 @@
+connect = require('connect')
 { app, config } = require('../app')
 bcrypt = require('bcrypt')
 { User } = require('../models/user')
@@ -7,6 +8,15 @@ everyauth = require('everyauth')
 Recaptcha = require('recaptcha').Recaptcha
 
 { captcha_public, captcha_secret, session_secret, twitter_key, twitter_secret, facebook_id, facebook_secret, facebook_callback } = config
+
+checkLoginPath =  ->
+  connect((req, res, next) ->
+    { referer } = req.headers
+    req.session.redirectTo = referer unless /login$/.test(referer)
+    next()
+  )
+
+app.use(checkLoginPath())
 
 everyauth.everymodule.findUserById((userId, callback) ->
   console.log('find user by id called')
@@ -149,7 +159,7 @@ app.get('/auth/captcha', (req, res) ->
   if userId
     everyauth.everymodule._findUserById(userId, (err, user) ->
       if user.human
-        res.redirect('/')
+        res.redirect(req.session.redirectTo or '/')
       else
         recaptcha = new Recaptcha(captcha_public, captcha_secret)
         res.render('users/recaptcha',
@@ -173,7 +183,8 @@ app.post('/auth/captcha', (req, res) ->
     recaptcha.verify((success, error_code) ->
       if success
         User.update({ _id: userId }, { $set: { human: true } }, {}, (err) ->
-          res.redirect('/')
+          res.redirect(req.session.redirectTo or '/')
+          delete req.session.redirectTo
         )
       else
         res.render('users/recaptcha',
@@ -182,7 +193,8 @@ app.post('/auth/captcha', (req, res) ->
         )
     )
   else
-    res.redirect('/')
+    res.redirect(req.session.redirectTo or '/')
+    delete req.session.redirectTo
 )
 
 module.exports.auth = (req, cb) ->

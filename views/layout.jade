@@ -35,14 +35,10 @@ html
               input.search-query(type="text", placeholder="Tag search")
             .btn-group.login
               - if (everyauth.loggedIn)
-                a.btn(href='/logout', title='Logout')
+                a.btn.btn-inverse(href='/logout', title='Logout')
                   i.icon-signout
               - else
-                a.btn.btn-success(href='/auth/twitter', title='Login with Twitter')
-                  i.icon-twitter-sign
-                a.btn.btn-success(href='/auth/facebook', title='Login with Facebook')
-                  i.icon-facebook-sign
-                a.btn.btn-success(href='/login', title='Login with a password')
+                a.btn.btn-success(href='/login', title='Login')
                   i.icon-signin
     .container
       !=body

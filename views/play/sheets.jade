@@ -1,14 +1,9 @@
 
--if (everyauth.loggedIn)
-  .btn-toolbar
-    .btn-group
-      button.btn.btn-success.save-sheet
-        i.icon-ok
-        | Save
-- else
+- if (!everyauth.loggedIn)
   .row
     .span6
       p Log in to save your character sheet for next time
+h2 Character Sheets
 ul.nav.nav-tabs
   - for (var i = 0; i < sheets.length; i++)
     li(class=i == 0 ? "active" : "")
@@ -34,11 +29,16 @@ ul.nav.nav-tabs
                         input.input-medium.stat.right-curves(placeholder="Stat", value=stat.label)
                       td.span3
                         .btn-group(data-toggle='buttons-radio')
-                          button.btn.btn-inverse(data-value="2d6 - 1", class=stat.roll === '2d6 - 1' ? "active" : '') -1
-                          button.btn.btn-inverse(data-value="2d6", class=stat.roll === '2d6' ? "active" : '') +0
-                          button.btn.btn-inverse(data-value="2d6 + 1", class=stat.roll === '2d6 + 1' ? "active" : '') +1
-                          button.btn.btn-inverse(data-value="2d6 + 2", class=stat.roll === '2d6 + 2' ? "active" : '') +2
-                          button.btn.btn-inverse(data-value="2d6 + 3", class=stat.roll === '2d6 + 3' ? "active" : '') +3
+                          button.btn.btn-inverse(data-value="2d6 - 1", class=stat.modifier === -1 ? "active" : '') -1
+                          button.btn.btn-inverse(data-value="2d6", class=stat.modifier === 0 ? "active" : '') +0
+                          button.btn.btn-inverse(data-value="2d6 + 1", class=stat.modifier === 1 ? "active" : '') +1
+                          button.btn.btn-inverse(data-value="2d6 + 2", class=stat.modifier === 2 ? "active" : '') +2
+                          button.btn.btn-inverse(data-value="2d6 + 3", class=stat.modifier === 3 ? "active" : '') +3
                           .btn-ish.btn-inverse.btn-input
-                            input.input.input-mini.custom-roll(placeholder="Custom")
-
+                            input.input.input-mini.custom-roll(placeholder="Custom", value=stat.custom ? stat.roll : '')
+-if (everyauth.loggedIn)
+  .btn-toolbar
+    .btn-group
+      button.btn.btn-success.save-sheet
+        i.icon-ok
+        | Save

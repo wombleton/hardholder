@@ -56,7 +56,7 @@ class @Play
       if message
         $('#room-contents').prepend("""
           <div class="row">
-            <div class="span7">
+            <div class="span6">
               <i class="icon-comment" title="#{time}"></i>
               <span class="label">#{name}</span>
               #{message}
@@ -66,11 +66,11 @@ class @Play
       else
         $('#room-contents').prepend("""
           <div class="row">
-            <div class="span7">
+            <div class="span6">
               <i class="icon-retweet" title=#{time}></i>
               <span class="label label-success">#{name}</span> rolled <span class="label label-info">#{stat} of #{roll}</span>
               and got
-              <span class="label label-#{status}">#{roll}</span>
+              <span class="label label-#{status}">#{result}</span>
             </div>
           </div>
         """)
@@ -113,7 +113,6 @@ class @Play
 
     postMessage = ->
       field = $('#messages input')
-      debugger
       socket.emit('message',
         message: field.val()
         name: $('#sheets .tab-pane.active .name').val()

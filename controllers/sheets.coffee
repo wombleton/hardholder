@@ -13,12 +13,22 @@ app.get('/sheets', (req, res) ->
       sheets = []
     collection = _.map(sheets, (sheet) ->
       { name, stats } = sheet
+      stats = _.map(stats, (stat) ->
+        standard =  _.include(['2d6 - 1', '2d6', '2d6 + 1', '2d6 + 2', '2d6 + 3'], stat.roll)
+        modifier = if standard then stat.roll.replace(/2d6|\s/g, '') else null
+        return {
+          label: stat.label
+          roll: stat.roll
+          custom: not standard
+          modifier: modifier
+        }
+      )
       return {
         name: name
         stats: stats
       }
     )
-    while collection.length < 6
+    while collection.length < 8
       collection.push(
         name: 'Blank'
         stats: []
@@ -39,7 +49,6 @@ app.post('/sheets', (req, res) ->
       if user
         debugger
         User.update( { _id: user.id }, { $set: { sheets: req.body.sheets } }, {}, (err) ->
-          debugger
           res.send('')
         )
       else

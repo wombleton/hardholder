@@ -5,31 +5,51 @@
         - each error in errors
           li.error= error
 .row
-  .span8
-    form.form-horizontal(action='/login', method='POST')
-      fieldset
-        legend Already registered?
-        .control-group
-          label.control-label(for=everyauth.password.loginFormFieldName) Login
-          .controls
-            input(type='text', name=everyauth.password.loginFormFieldName)
-        .control-group
-          label.control-label(for=everyauth.password.passwordFormFieldName) Password
-          .controls
-            input(type='password', name=everyauth.password.passwordFormFieldName)
-        .form-actions
-          button.btn.btn-primary(type='submit') Login
-  .span4
-    form.form-horizontal(action='/register', method='POST')
-      fieldset
-        legend Not registered yet?
-        .control-group
-          label.control-label(for=everyauth.password.loginFormFieldName) Login
-          .controls
-            input(type='text', name=everyauth.password.loginFormFieldName, autocomplete='off')
-        .control-group
-          label.control-label(for=everyauth.password.passwordFormFieldName) Password
-          .controls
-            input(type='password', name=everyauth.password.passwordFormFieldName)
-        .form-actions
-          button.btn.btn-primary(type='submit') Register
+  .span12
+    h1 Login with a service
+    .well
+      a.btn.btn-success.btn-large(href='/auth/twitter', title='Login with Twitter')
+        i.icon-twitter-sign
+        |  Login with Twitter
+      | &nbsp;
+      a.btn.btn-success.btn-large(href='/auth/facebook', title='Login with Facebook')
+        i.icon-facebook-sign
+        |  Login with Facebook
+.row
+  .span12
+    h1
+      ... or login with a password
+    ul.nav.nav-tabs
+      li.active
+        a(href="#login", data-toggle="tab") Login
+      li
+        a(href="#register", data-toggle="tab") Register
+    .tab-content
+      #login.tab-pane.active
+        form.form-horizontal(action='/login', method='POST')
+          fieldset
+            legend Have a username and password?
+            .control-group
+              label.control-label(for=everyauth.password.loginFormFieldName) Login
+              .controls
+                input(type='text', name=everyauth.password.loginFormFieldName)
+            .control-group
+              label.control-label(for=everyauth.password.passwordFormFieldName) Password
+              .controls
+                input(type='password', name=everyauth.password.passwordFormFieldName)
+            .form-actions
+              button.btn.btn-primary(type='submit') Login
+      #register.tab-pane
+        form.form-horizontal(action='/register', method='POST')
+          fieldset
+            legend Not registered yet?
+            .control-group
+              label.control-label(for=everyauth.password.loginFormFieldName) Login
+              .controls
+                input(type='text', name=everyauth.password.loginFormFieldName, autocomplete='off')
+            .control-group
+              label.control-label(for=everyauth.password.passwordFormFieldName) Password
+              .controls
+                input(type='password', name=everyauth.password.passwordFormFieldName)
+            .form-actions
+              button.btn.btn-primary(type='submit') Register
