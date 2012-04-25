@@ -5,6 +5,7 @@
   "dependencies": {
     "bcrypt": ">= 0.5.0",
     "coffee-script": ">= 1.2.0",
+    "connect": ">= 1.8.7",
     "connect-assets": "= 2.1.8",
     "countdown": "= 2.2.0",
     "dateformat": ">= 1.0.1",

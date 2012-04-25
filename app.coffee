@@ -2,12 +2,11 @@ express = require('express')
 app = express.createServer()
 
 config = undefined
-port = 3000
+port = process.env.PORT or 3000
 
 app.configure('production', ->
   config = require('/home/node/hardholder_config').cfg
   app.use(express.errorHandler())
-  port = 80
 )
 
 app.configure('development', ->
