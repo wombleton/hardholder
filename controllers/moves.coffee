@@ -64,14 +64,17 @@ app.post('/moves', (req, res) ->
       if authed
         move.save((err) ->
           if err
+            console.log("Err: #{err}")
             res.redirect('/moves/new')
           else
             res.redirect(move.url)
         )
       else
+        console.log("not authed")
         res.redirect('/moves/new')
     )
   else
+    console.log("errors: #{errors.join('\n')}")
     res.redirect('/moves/new')
 )
 
