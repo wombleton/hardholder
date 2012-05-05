@@ -1,16 +1,13 @@
 express = require('express')
 app = express.createServer()
 
-config = undefined
 port = process.env.PORT or 3000
 
 app.configure('production', ->
-  config = require('/home/node/hardholder_config').cfg
   app.use(express.errorHandler())
 )
 
 app.configure('development', ->
-  config = require('./hardholder_config').cfg
   app.use(express.errorHandler(
     dumpExceptions: true
     showStack: true
@@ -27,7 +24,7 @@ app.configure(->
   app.use(require('connect-assets')())
   app.use(express.cookieParser())
 
-  app.use(express.session( secret: config.session_secret ))
+  app.use(express.session( secret: process.env.SESSION_SECRET ))
 )
 
 app.get('/', (req, res) ->
@@ -40,9 +37,8 @@ app.dynamicHelpers(
 )
 
 module.exports.app = app
-module.exports.config = config
 
-require './db'
+require('./db')
 
 require('./models/move')
 require('./models/sheet')

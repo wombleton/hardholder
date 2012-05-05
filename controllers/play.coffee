@@ -33,6 +33,10 @@ app.get('/play/:id', (req, res) ->
 )
 
 io = require('socket.io').listen(app)
+io.configure(->
+  io.set('transports', ['xhr-polling'])
+  io.set('polling duration', 10)
+)
 
 dx = (d) ->
   Math.floor(Math.random() * Number(d)) + 1

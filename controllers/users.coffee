@@ -1,5 +1,5 @@
 connect = require('connect')
-{ app, config } = require('../app')
+{ app } = require('../app')
 bcrypt = require('bcrypt')
 { User } = require('../models/user')
 mongoose = require('mongoose')
@@ -7,7 +7,7 @@ mongoose = require('mongoose')
 everyauth = require('everyauth')
 Recaptcha = require('recaptcha').Recaptcha
 
-{ captcha_public, captcha_secret, session_secret, twitter_key, twitter_secret, facebook_id, facebook_secret, facebook_callback } = config
+{ CAPTCHA_PUBLIC, CAPTCHA_SECRET, TWITTER_KEY, TWITTER_SECRET, FACEBOOK_ID, FACEBOOK_SECRET } = process.env
 
 checkLoginPath =  ->
   connect((req, res, next) ->
@@ -89,8 +89,8 @@ everyauth.password
   .registerSuccessRedirect('/auth/captcha')
 
 everyauth.twitter
-  .consumerKey(twitter_key)
-  .consumerSecret(twitter_secret)
+  .consumerKey(TWITTER_KEY)
+  .consumerSecret(TWITTER_SECRET)
   .findOrCreateUser((sess, accessToken, accessSecret, twitUser) ->
     promise = @Promise()
     User.findOne('twitter.id': twitUser.id, (err, user) ->
@@ -118,8 +118,8 @@ everyauth.twitter
   .redirectPath('/auth/captcha')
 
 everyauth.facebook
-  .appId(facebook_id)
-  .appSecret(facebook_secret)
+  .appId(FACEBOOK_ID)
+  .appSecret(FACEBOOK_SECRET)
   .findOrCreateUser((sess, accessToken, accessTokenExtra, fbUser) ->
     promise = @Promise()
     User.findOne('facebook.id': fbUser.id, (err, user) ->
@@ -161,7 +161,7 @@ app.get('/auth/captcha', (req, res) ->
       if user.human
         res.redirect(req.session.redirectTo or '/')
       else
-        recaptcha = new Recaptcha(captcha_public, captcha_secret)
+        recaptcha = new Recaptcha(CAPTCHA_PUBLIC, CAPTCHA_SECRET)
         res.render('users/recaptcha',
           locals:
             recaptcha_form: recaptcha.toHTML()
@@ -179,7 +179,7 @@ app.post('/auth/captcha', (req, res) ->
       remoteip: req.connection.remoteAddress
       challenge: req.body.recaptcha_challenge_field
       response:  req.body.recaptcha_response_field
-    recaptcha = new Recaptcha(config.captcha_public, config.captcha_secret, data)
+    recaptcha = new Recaptcha(CAPTCHA_PUBLIC, CAPTCHA_SECRET, data)
     recaptcha.verify((success, error_code) ->
       if success
         User.update({ _id: userId }, { $set: { human: true } }, {}, (err) ->
