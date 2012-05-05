@@ -15,7 +15,13 @@ app.get('/sheets', (req, res) ->
       { name, stats } = sheet
       stats = _.map(stats, (stat) ->
         standard =  _.include(['2d6 - 1', '2d6', '2d6 + 1', '2d6 + 2', '2d6 + 3'], stat.roll)
-        modifier = if standard then stat.roll.replace(/2d6|\s/g, '') else null
+        if standard
+          if stat.roll is '2d6'
+            modifier = '0'
+          else
+            modifier = stat.roll.replace(/2d6|\s/g, '')
+        else
+          modifier = null
         return {
           label: stat.label
           roll: stat.roll
@@ -29,9 +35,17 @@ app.get('/sheets', (req, res) ->
       }
     )
     while collection.length < 8
+      stats = []
+      for i in [1..10]
+        stats.push(
+          label: 'Blank'
+          roll: '2d6'
+          modifier: '0'
+          custom: false
+        )
       collection.push(
         name: 'Blank'
-        stats: []
+        stats: stats
       )
     res.partial('play/sheets',
       locals:

@@ -29,11 +29,11 @@ ul.nav.nav-tabs
                         input.input-medium.stat.right-curves(placeholder="Stat", value=stat.label)
                       td.span3
                         .btn-group(data-toggle='buttons-radio')
-                          button.btn.btn-inverse(data-value="2d6 - 1", class=stat.modifier === -1 ? "active" : '') -1
-                          button.btn.btn-inverse(data-value="2d6", class=stat.modifier === 0 ? "active" : '') +0
-                          button.btn.btn-inverse(data-value="2d6 + 1", class=stat.modifier === 1 ? "active" : '') +1
-                          button.btn.btn-inverse(data-value="2d6 + 2", class=stat.modifier === 2 ? "active" : '') +2
-                          button.btn.btn-inverse(data-value="2d6 + 3", class=stat.modifier === 3 ? "active" : '') +3
+                          button.btn.btn-inverse(data-value="2d6 - 1", class=stat.modifier === '-1' ? "active" : '') -1
+                          button.btn.btn-inverse(data-value="2d6", class=stat.modifier === '0' ? "active" : '') +0
+                          button.btn.btn-inverse(data-value="2d6 + 1", class=stat.modifier === '+1' ? "active" : '') +1
+                          button.btn.btn-inverse(data-value="2d6 + 2", class=stat.modifier === '+2' ? "active" : '') +2
+                          button.btn.btn-inverse(data-value="2d6 + 3", class=stat.modifier === '+3' ? "active" : '') +3
                           .btn-ish.btn-inverse.btn-input
                             input.input.input-mini.custom-roll(placeholder="Custom", value=stat.custom ? stat.roll : '')
 -if (everyauth.loggedIn)
