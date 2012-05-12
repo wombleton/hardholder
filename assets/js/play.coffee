@@ -46,10 +46,10 @@ class @Play
       $('#room-contents').html('')
     )
     socket.on('message', (data) ->
-      { message, name, result, roll, stat, time } = data
-      if roll >= 10
+      { message, name, dice, result, roll, stat, time } = data
+      if result >= 10
         status = 'success'
-      else if 7 <= roll <= 9
+      else if 7 <= result <= 9
         status = 'info'
       else
         status = 'important'
@@ -70,7 +70,7 @@ class @Play
               <i class="icon-retweet" title=#{time}></i>
               <span class="label label-success">#{name}</span> rolled <span class="label label-info">#{stat} of #{roll}</span>
               and got
-              <span class="label label-#{status}">#{result}</span>
+               #{_.map(dice, (die) -> "<span class=\"label\">" + die + "</span>").join(' + ')}  = <span class="label label-#{status}">#{result}</span>
             </div>
           </div>
         """)

@@ -90,6 +90,8 @@ io.sockets.on('connection', (socket) ->
 
       socket.get('room', (err, room) ->
         io.sockets.in(room).emit('message', addMessage(room,
+          custom: parsed.custom
+          dice: parsed.roll
           roll: roll
           name: name
           result: result
