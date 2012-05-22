@@ -32,8 +32,14 @@ body {
 }
 
 .navbar-fixed-bottom {
-  .container {
-    padding-top: 5px;
+  form {
+    margin-top: 5px;
+    .btn-group {
+      padding: 5px 0 0;
+    }
+    .input-append button {
+      margin-left: 0;
+    }
   }
 }
 
@@ -46,6 +52,10 @@ body {
 
 #room-contents {
   .icon-charname:before { content: "\f005"; }
+  &.burning-wheel {
+    margin-bottom: 152px;
+    margin-top: -20px;
+  }
 }
 #sheets {
   .accordion-heading {

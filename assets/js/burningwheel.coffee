@@ -11,7 +11,7 @@ class @BurningWheel
         d >= 4
       ).length
       if message
-        $('#room-contents').prepend("""
+        $('#room-contents').append("""
           <div class="row">
             <div class="span10">
               <i class="icon-comment" title="#{time}"></i>
@@ -21,7 +21,7 @@ class @BurningWheel
           </div>
         """)
       else
-        $('#room-contents').prepend("""
+        $('#room-contents').append("""
           <div class="row">
             <div class="span10">
               <i class="icon-retweet" title="#{time}"></i>
@@ -31,6 +31,8 @@ class @BurningWheel
             </div>
           </div>
         """)
+
+      window.scrollBy(0, document.body.offsetHeight)
     )
     $('[data-dice]').live('click', ->
       name = $('[name=name]').val()
