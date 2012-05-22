@@ -1,0 +1,22 @@
+.row.hidden
+  .span6.hidden
+    form#room-form.well.form-inline
+      input#room(placeholder="public", autocomplete="off")
+.row
+  .span10
+    #room-contents
+.navbar.navbar-fixed-bottom
+  .navbar-inner
+    .container
+      form#messages.form-inline.form
+        .row
+          input(name="name", placeholder="Your name here")
+        .row
+          .btn-group
+            - for (var i = 0; i < 12; i++)
+              a.btn.btn-primary(data-dice=i+1)=(i+1) + 'd6'
+        .row
+          .input-append
+            input.input.input-large.span8(placeholder="Type here ...", name="chat")
+            button.btn.btn-success(type="submit")
+              i.icon-comment

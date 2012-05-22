@@ -46,6 +46,7 @@ require('./models/sheet')
 require('./controllers/users')
 require('./controllers/moves')
 require('./controllers/play')
+require('./controllers/burningwheel')
 require('./controllers/sheets')
 
 app.listen(port) unless app.settings.env is 'TEST'

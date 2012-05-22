@@ -10,29 +10,34 @@ html
     != js('hardholder')
     link(rel='SHORTCUT ICON', href='/images/hardholder.png')
 
-    script(type='text/javascript')
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-22941220-1']);
-      _gaq.push(['_trackPageview']);
+    - if (app.settings.env === 'production')
+      script(type='text/javascript')
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-22941220-1']);
+        _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
   body(data-offset="50")
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
-          a.brand(href='/') hardholder.com
+          a.brand(href='/')
+            | hardholder.com
           ul.nav
             li(class=category === 'moves' ? 'active' : '')
               a(href="/moves") Moves
             li(class=category === 'play' ? 'active' : '')
-              a(href="/play") Play
+              a(href="/play") Apocalypse World
+            li(class=category === 'burningwheel' ? 'active' : '')
+              a(href="/burningwheel") Burning Wheel
           .pull-right
-            form#search.navbar-search
-              input.search-query(type="text", placeholder="Tag search")
+            - if (category === 'moves')
+              form#search.navbar-search
+                input.search-query(type="text", placeholder="Tag search")
             .btn-group.login
               - if (everyauth.loggedIn)
                 a.btn.btn-inverse(href='/logout', title='Logout')
@@ -43,14 +48,15 @@ html
     .container
       !=body
     footer
-      .container
-        .row
-          .span12
-            .btn-group
-              a.btn(href='http://twitter.com/wombleton') @wombleton
-              a.btn(href='http://apocalypse-world.com')
-                i.icon-external-link
-                |  Apocalypse World
-              a.btn(href='/moves/rss')
-                i.icon-bookmark
-                |  RSS
+      - if (category !== 'burningwheel')
+        .container
+          .row
+            .span12
+              .btn-group
+                a.btn(href='http://twitter.com/wombleton') @wombleton
+                a.btn(href='http://apocalypse-world.com')
+                  i.icon-external-link
+                  |  Apocalypse World
+                a.btn(href='/moves/rss')
+                  i.icon-bookmark
+                  |  RSS

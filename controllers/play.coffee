@@ -2,28 +2,7 @@
 _ = require('underscore')
 _s = require('underscore.string')
 countdown = require('countdown')
-PEG = require('pegjs')
-
-parser = PEG.buildParser("""
-start
-  = roll:roll modifier:integer { return { roll: roll, modifier: modifier }; }
-  / roll:roll { return { roll: roll, modifier: 0 }; }
-roll
-  = count:integer type:type size:integer {
-    var result = [];
-    for (var i = 0; i < count; i++) {
-      result.push(Math.floor(Math.random() * size) + 1)
-    }
-    return result;
-  }
-type
-  = [dD]
-integer
-  = space "-" space digits:[0-9]+ { return -1 * parseInt(digits.join(''), 10); }
-  / space [ + ]? space digits:[0-9]+ { return parseInt(digits.join(''), 10); }
-space
-  = " "*
-""")
+roller = require('../lib/roller')
 
 app.get('/play', (req, res) ->
   res.render('play/index')
@@ -82,29 +61,24 @@ io.sockets.on('connection', (socket) ->
   )
   socket.on('roll', (data) ->
     { stat, name, roll } = data
-    try
-      parsed = parser.parse(roll)
-      result = _.reduce(parsed.roll, (memo, roll) ->
-        memo + roll
-      , 0) + parsed.modifier
+    { custom, error, dice, result } = roller.roll(roll)
 
-      socket.get('room', (err, room) ->
+    socket.get('room', (err, room) ->
+      unless error
         io.sockets.in(room).emit('message', addMessage(room,
-          custom: parsed.custom
-          dice: parsed.roll
+          custom: custom
+          dice: dice
           roll: roll
           name: name
           result: result
           stat: stat
         ))
-      )
-    catch e
-      socket.get('room', (err, room) ->
+      else
         io.sockets.in(room).emit('message',
           name: name
-          message: "tried to roll #{roll} but that looks like bad syntax. 2d6 is an example that will work."
+          message: error
         )
-      )
+    )
   )
   socket.on('message', (data) ->
     { name, message } = data

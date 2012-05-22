@@ -7,6 +7,10 @@
 #= require bootstrap-tooltip
 #= require underscore.string.min
 #= require play
+#= require burningwheel
+
+if /^\/burningwheel/.test(window.location.pathname)
+  new BurningWheel()
 
 if /^\/play/.test(window.location.pathname)
   new Play()
