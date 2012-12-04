@@ -25,7 +25,7 @@ space
 module.exports.roll = (s) ->
   try
     parsed = parser.parse(s)
-    parsed.result = _.reduce(parsed.dice, (memo, die) ->
+    parsed.result = _.reduce(parsed.roll, (memo, die) ->
       memo + die
     , 0) + parsed.modifier
     parsed
